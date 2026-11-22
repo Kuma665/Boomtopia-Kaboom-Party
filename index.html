@@ -273,6 +273,8 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 #inv{z-index:9}
 #touch{left:max(8px,env(safe-area-inset-left));right:max(8px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));justify-content:flex-start;gap:14px}
 #touch .acts{margin-left:auto;margin-bottom:70px}
+#joy{position:relative;width:124px;height:124px;border-radius:50%;background:rgba(18,30,42,.4);border:2px solid rgba(255,255,255,.28);pointer-events:auto;touch-action:none;user-select:none;flex:none}
+#joy i{position:absolute;left:50%;top:50%;width:54px;height:54px;margin:-27px 0 0 -27px;border-radius:50%;background:rgba(255,255,255,.34);border:2px solid rgba(255,255,255,.6);pointer-events:none}
 @media (max-height:520px),(pointer:coarse){#wind{left:128px;top:34px}}
 @media (max-height:520px){
  #wlist{grid-template-columns:repeat(5,50px);gap:5px}
@@ -312,7 +314,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
   <div id="banner"></div>
   <div id="inv" hidden><div id="weapons" class="panel"><div id="wlist"></div><div id="winfo"></div></div><button id="wcur" class="panel" type="button"></button></div>
   <div id="touch" hidden>
-    <div class="pad"><button data-k="KeyW" style="grid-area:w">▲</button><button data-k="KeyA" style="grid-area:a">◀</button><button data-k="KeyS" style="grid-area:s">▼</button><button data-k="KeyD" style="grid-area:d">▶</button></div>
+    <div id="joy"><i></i></div>
     
     <div class="acts"><button id="tJump">Sprung</button><button id="tWeap">Waffe</button><button id="tFire">Feuer</button><button id="tCam">Kamera</button></div>
   </div>
@@ -370,7 +372,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
         <dt>Mehrere Controller</dt><dd>Pro Team Steuerung wählen (🎮 1–4). Jeder spielt nur im eigenen Zug.</dd>
       </dl></details>
     </div>
-    <div id="ver">v2026-11-22c</div>
+    <div id="ver">v2026-11-22d</div>
   </div>
   <div id="credits" class="overlay" hidden><div class="card"><h1>Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button">OK</button></div></div></div>
 <button id="muteBtn" type="button" aria-label="Ton an/aus">🔊</button><div id="padhint" hidden></div><div id="rot"><div class="ri">📱</div><div>Bitte das Handy quer halten</div></div>
@@ -3350,6 +3352,12 @@ document.querySelectorAll('#touch [data-k]').forEach(b=>{
   const up=()=>{keys[k]=false;};
   b.addEventListener('pointerup',up);b.addEventListener('pointerleave',up);b.addEventListener('pointercancel',up);
 });
+(function(){const J=$('joy'),K=J.firstElementChild;let pid=null;const set=(w,a,s,d)=>{keys.KeyW=w;keys.KeyA=a;keys.KeyS=s;keys.KeyD=d;};
+  const mv=e=>{const r=J.getBoundingClientRect(),R=r.width/2;let x=e.clientX-r.left-R,y=e.clientY-r.top-R;const l=Math.hypot(x,y);if(l>R*.7){x*=R*.7/l;y*=R*.7/l;}K.style.transform='translate('+x+'px,'+y+'px)';const m=Math.hypot(x,y);if(m<R*.18){set(0,0,0,0);return;}const nx=x/m,ny=y/m;set(ny<-.38,nx<-.38,ny>.38,nx>.38);};
+  const end=e=>{if(e.pointerId!==pid)return;pid=null;K.style.transform='';set(0,0,0,0);};
+  J.addEventListener('pointerdown',e=>{e.preventDefault();pid=e.pointerId;try{J.setPointerCapture(pid);}catch(_){}mv(e);});
+  J.addEventListener('pointermove',e=>{if(e.pointerId===pid)mv(e);});J.addEventListener('pointerup',end);J.addEventListener('pointercancel',end);
+})();
 $('tJump').addEventListener('click',()=>{if(st.phase==='aim'&&!st.cpuTurn)jump(st.worm);});
 $('tWeap').addEventListener('click',()=>selectWeapon(nextUsable(1)));
 $('tCam').addEventListener('pointerdown',e=>{e.preventDefault();st.free=!st.free;toast(st.free?'Freie Kamera: Pfeil-Pad fliegen, Wischen = umsehen, Kamera-Knopf nochmal = zurück':'Kamera folgt wieder');});
