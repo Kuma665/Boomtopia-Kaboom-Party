@@ -267,6 +267,34 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 #pdial{overflow:visible}
 #pneedle{transform-origin:22px 50px;transform-box:view-box}
 @media (pointer:coarse){#pdial{display:none}}
+/* ===== Handy-Querformat (Feinschliff 22.11.2026) ===== */
+.opt[hidden]{display:none!important}
+#sd{font-size:12px}
+#inv{z-index:9}
+#touch{left:max(8px,env(safe-area-inset-left));right:max(8px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));justify-content:flex-start;gap:14px}
+#touch .acts{margin-left:auto;margin-bottom:70px}
+@media (max-height:520px),(pointer:coarse){#wind{left:128px;top:34px}}
+@media (max-height:520px){
+ #wlist{grid-template-columns:repeat(5,50px);gap:5px}
+ .wbtn{height:50px;width:50px;border-radius:12px}.wbtn svg{width:26px;height:26px}
+ #weapons{padding:8px}
+}
+@media (max-height:520px) and (orientation:landscape){
+ #menu .card{width:min(860px,100%);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:auto auto auto;column-gap:18px;align-content:start;padding:10px 16px;overflow:auto}
+ #menu .card h1.logo{grid-column:1;grid-row:1;width:min(100%,190px);margin:0 auto 2px}
+ #menu .optgrid{grid-column:1;grid-row:2;grid-template-columns:1fr;margin:0}
+ #menu .optgrid .opt{margin:0 0 5px;gap:3px}
+ #menu .chips{gap:4px}
+ #menu .chips button{padding:5px 9px;font-size:12px}
+ #menu .tcards{grid-column:2;grid-row:1/3;align-self:start;margin:0;gap:5px;max-height:calc(100vh - 100px);overflow:auto}
+ #menu .tcard{grid-template-columns:40px repeat(3,minmax(0,1fr)) auto;padding:4px 6px}
+ #menu .tcard input.tn{grid-column:2/-1}
+ #menu .tcard select{padding:6px 3px;font-size:12px}
+ #menu .tcard .pv{grid-row:span 2;width:40px;height:40px}
+ #menu .keysbox{grid-column:1/-1;grid-row:4}
+ #menu .btns{grid-column:1/-1;grid-row:3;position:static;flex-wrap:nowrap;margin:4px 0 0;padding:0;background:none}
+ #menu .btns button{flex:1 1 0;font-size:18px;padding:8px 12px}
+}
 </style>
 <div id="game">
   <canvas id="view"></canvas>
@@ -342,7 +370,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
         <dt>Mehrere Controller</dt><dd>Pro Team Steuerung wählen (🎮 1–4). Jeder spielt nur im eigenen Zug.</dd>
       </dl></details>
     </div>
-    <div id="ver">v2026-11-22</div>
+    <div id="ver">v2026-11-22b</div>
   </div>
   <div id="credits" class="overlay" hidden><div class="card"><h1>Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button">OK</button></div></div></div>
 <button id="muteBtn" type="button" aria-label="Ton an/aus">🔊</button><div id="padhint" hidden></div><div id="rot"><div class="ri">📱</div><div>Bitte das Handy quer halten</div></div>
@@ -2800,7 +2828,7 @@ function pollPad(dt){
   padPrevs[g.index]=g.buttons.map(b=>b.pressed);
 }
 window.addEventListener('gamepadconnected',e=>{const ps=/054c|dualshock|dualsense|wireless controller|playstation/i.test(e.gamepad.id||'');st.ps=ps;toast(ps?'PS-Controller verbunden':'Controller verbunden');if(ps){const dt=[...document.querySelectorAll('.keys dt')].find(x=>x.textContent==='Controller');if(dt)dt.nextElementSibling.textContent='Sticks laufen und zielen, ✕ Sprung (Stick = Richtung, in der Luft steuerbar), ○ Rückwärtssalto (beim Laden: Schuss abbrechen), L2 halten = Ego-Zielen, R2 kurz = Schuss mit Vorwahl / halten = laden, Steuerkreuz ↑↓ antippen = Kraft (halten = Zoom), △ Waffenrad (Stick wählen, ✕ bestätigen)';}});
-function updatePadInfo(){const L=padList(),e=$('padtxt');if(e)e.textContent=L.length?L.length+' verbunden: '+L.map((p,i)=>'🎮'+(i+1)).join(' '):'keiner erkannt – Taste am Controller drücken';}
+function updatePadInfo(){const L=padList(),e=$('padtxt');if(e){e.parentNode.hidden=!L.length;e.textContent=L.length?L.length+' verbunden: '+L.map((p,i)=>'🎮'+(i+1)).join(' '):'keiner erkannt – Taste am Controller drücken';}}
 window.addEventListener('gamepadconnected',updatePadInfo);window.addEventListener('gamepaddisconnected',updatePadInfo);updatePadInfo();
 
 /* ---------- Extras: Bananenbombe, Minen, Kisten ---------- */
