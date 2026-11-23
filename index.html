@@ -19,6 +19,12 @@ body.haspad #touch{display:none!important}
 #rot .ri{font-size:56px;animation:rotHint 1.6s ease-in-out infinite}
 @keyframes rotHint{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
 @media (orientation:portrait) and (pointer:coarse){#rot{display:flex}}
+#help .card{zoom:var(--mz,1);width:min(820px,100%);padding:10px 16px}
+#help h1{margin:0 0 6px;font-size:22px}
+#helpGrid{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;text-align:left;margin-bottom:8px}
+#helpGrid div{background:rgba(255,255,255,.07);border-radius:10px;padding:6px 10px;font-size:13px;line-height:1.35}
+#helpGrid b{display:block;font-size:13px;color:#ffd84a}
+#helpGrid .psg{font-size:.9em}
 #credList{margin:0 0 16px;padding-left:18px;text-align:left;line-height:1.5;font-size:14px}
 #errbox{position:fixed;z-index:99999;left:calc(6px + env(safe-area-inset-left,0px));bottom:calc(6px + env(safe-area-inset-bottom,0px));max-width:60vw;font:11px/1.3 system-ui,sans-serif;color:#fff;background:rgba(140,0,0,.85);border-radius:6px;padding:4px 8px;pointer-events:auto}
 .card h1.logo{margin:0 auto 6px;width:min(100%,270px);animation:none;text-shadow:none;font-size:0;line-height:0}
@@ -281,14 +287,14 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
  .wbtn{height:50px;width:50px;border-radius:12px}.wbtn svg{width:26px;height:26px}
  #weapons{padding:8px}
 }
-@media (max-height:520px) and (orientation:landscape){
- #menu .card{width:min(860px,100%);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:auto auto auto;column-gap:18px;align-content:start;padding:10px 16px;overflow:auto}
+@media (orientation:landscape){
+ #menu .card{zoom:var(--mz,1);width:min(860px,100%);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);grid-template-rows:auto auto auto;column-gap:18px;align-content:start;padding:10px 16px;overflow:auto}
  #menu .card h1.logo{grid-column:1;grid-row:1;width:min(100%,190px);margin:0 auto 2px}
  #menu .optgrid{grid-column:1;grid-row:2;grid-template-columns:1fr;margin:0}
  #menu .optgrid .opt{margin:0 0 5px;gap:3px}
  #menu .chips{gap:4px}
  #menu .chips button{padding:5px 9px;font-size:12px}
- #menu .tcards{grid-column:2;grid-row:1/3;align-self:start;margin:0;gap:5px;max-height:calc(100vh - 100px);overflow:auto}
+ #menu .tcards{grid-column:2;grid-row:1/3;align-self:start;margin:0;gap:5px;max-height:calc(100vh/var(--mz,1) - 100px);overflow:auto}
  #menu .tcard{grid-template-columns:40px repeat(3,minmax(0,1fr)) auto;padding:4px 6px}
  #menu .tcard input.tn{grid-column:2/-1}
  #menu .tcard select{padding:6px 3px;font-size:12px}
@@ -351,29 +357,11 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 </g>
 <g transform="translate(52 78) rotate(12)"><path d="M0 -17 L4.8 -4.8 L17 0 L4.8 4.8 L0 17 L-4.8 4.8 L-17 0 L-4.8 -4.8 Z" fill="#fff" stroke="#fff" stroke-width="12" stroke-linejoin="round"/><path d="M0 -17 L4.8 -4.8 L17 0 L4.8 4.8 L0 17 L-4.8 4.8 L-17 0 L-4.8 -4.8 Z" fill="#2a0c06" stroke="#2a0c06" stroke-width="6" stroke-linejoin="round"/><path d="M0 -17 L4.8 -4.8 L17 0 L4.8 4.8 L0 17 L-4.8 4.8 L-17 0 L-4.8 -4.8 Z" fill="#ffd23f"/></g><g transform="translate(632 72) rotate(-10)"><path d="M0 -15 L4.2 -4.2 L15 0 L4.2 4.2 L0 15 L-4.2 4.2 L-15 0 L-4.2 -4.2 Z" fill="#fff" stroke="#fff" stroke-width="12" stroke-linejoin="round"/><path d="M0 -15 L4.2 -4.2 L15 0 L4.2 4.2 L0 15 L-4.2 4.2 L-15 0 L-4.2 -4.2 Z" fill="#2a0c06" stroke="#2a0c06" stroke-width="6" stroke-linejoin="round"/><path d="M0 -15 L4.2 -4.2 L15 0 L4.2 4.2 L0 15 L-4.2 4.2 L-15 0 L-4.2 -4.2 Z" fill="#ffd23f"/></g><g transform="translate(40 236) rotate(0)"><path d="M0 -13 L3.6 -3.6 L13 0 L3.6 3.6 L0 13 L-3.6 3.6 L-13 0 L-3.6 -3.6 Z" fill="#fff" stroke="#fff" stroke-width="12" stroke-linejoin="round"/><path d="M0 -13 L3.6 -3.6 L13 0 L3.6 3.6 L0 13 L-3.6 3.6 L-13 0 L-3.6 -3.6 Z" fill="#2a0c06" stroke="#2a0c06" stroke-width="6" stroke-linejoin="round"/><path d="M0 -13 L3.6 -3.6 L13 0 L3.6 3.6 L0 13 L-3.6 3.6 L-13 0 L-3.6 -3.6 Z" fill="#ff8a1f"/></g><circle cx="34" cy="150" r="6" fill="#fff" stroke="#fff" stroke-width="9"/><circle cx="34" cy="150" r="6" fill="#ff8a1f" stroke="#2a0c06" stroke-width="5"/><circle cx="650" cy="140" r="5" fill="#fff" stroke="#fff" stroke-width="9"/><circle cx="650" cy="140" r="5" fill="#ffd23f" stroke="#2a0c06" stroke-width="5"/><circle cx="600" cy="50" r="5" fill="#fff" stroke="#fff" stroke-width="9"/><circle cx="600" cy="50" r="5" fill="#ff8a1f" stroke="#2a0c06" stroke-width="5"/>
 </svg></h1>
-      <div class="optgrid"><div class="opt"><span>Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span>Würmer pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span>Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on">Zufall</button><button data-v="0">Insel</button><button data-v="1">Archipel</button><button data-v="2">Schlucht</button><button data-v="3">Felsnadeln</button></div></div><div class="opt"><span>Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on">Zufall</button><button data-v="0">Wiese</button><button data-v="1">Schnee</button><button data-v="2">Wüste</button><button data-v="3">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span>Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0">Einfach</button><button type="button" data-v="1" class="on">Normal</button><button type="button" data-v="2">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span>Controller</span><div id="padtxt">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p">Spiel starten</button><button id="bSet" class="alt" type="button">Einstellungen</button></div>
-      <details class="keysbox"><summary>Tastenbelegung</summary><dl class="keys">
-        <dt>WASD</dt><dd>Laufen</dd>
-        <dt>Maus</dt><dd>Halten = laden, loslassen = Feuer. Mit Zielhilfe (Kurz/Voll): kurz klicken = Schuss mit Vorwahl-Kraft, Shift + Mausrad = Kraft vorwählen</dd>
-        <dt>Pfeile</dt><dd>Zielen ohne Maus-Sperre</dd>
-        <dt>Q E / C</dt><dd>Kamera</dd>
-        <dt>Z / Rechtsklick halten / L2</dt><dd>Ego-Sicht zum Zielen (beim Aufladen automatisch)</dd>
-        <dt>H</dt><dd>Team-Übersicht als Popup (Controller: R3)</dd>
-        <dt>V</dt><dd>Freie Flugkamera: WASD fliegen, Maus ziehen = umsehen, R/F hoch/runter, Shift schnell, Mausrad vor/zurück, Mittelklick ziehen = schieben · Controller: Select</dd>
-        <dt>Enter / B</dt><dd>Sprung / Salto</dd>
-        <dt>1–0 / Tab / G</dt><dd>Waffe / Inventar</dd>
-        <dt>Backspace</dt><dd>1 s halten = Zug beenden</dd>
-        <dt>R</dt><dd>Zurück zur letzten Waffe</dd>
-        <dt>Leertaste</dt><dd>Halten = laden, loslassen = Schuss · mit Zielhilfe: kurz tippen = Schuss mit Vorwahl-Kraft</dd>
-        <dt>Bild ↑↓ / , .</dt><dd>Kraft vorwählen (±5 %, nur mit Zielhilfe)</dd>
-        <dt>Entf</dt><dd>Beim Laden: abbrechen, ohne zu schießen</dd>
-        <dt>F / P</dt><dd>Auf Gegner zielen (Zielhilfe Kurz: Winkel inkl. Wind, Voll: auch Kraft; mehrmals = nächster Gegner) / Pause</dd>
-        <dt>Controller</dt><dd>Sticks laufen und zielen, A Sprung (Stick = Richtung, in der Luft steuerbar), B Rückwärtssalto (beim Laden: Schuss abbrechen), L2 halten = Ego-Zielen, RT kurz = Schuss mit Vorwahl / halten = laden, Steuerkreuz ↑↓ antippen = Kraft (halten = Zoom), Y Waffenrad (Stick wählen, A bestätigen)</dd>
-        <dt>Mehrere Controller</dt><dd>Pro Team Steuerung wählen (🎮 1–4). Jeder spielt nur im eigenen Zug.</dd>
-      </dl></details>
-    </div>
-    <div id="ver">v2026-11-23b-r187</div>
+      <div class="optgrid"><div class="opt"><span>Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span>Würmer pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span>Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on">Zufall</button><button data-v="0">Insel</button><button data-v="1">Archipel</button><button data-v="2">Schlucht</button><button data-v="3">Felsnadeln</button></div></div><div class="opt"><span>Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on">Zufall</button><button data-v="0">Wiese</button><button data-v="1">Schnee</button><button data-v="2">Wüste</button><button data-v="3">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span>Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0">Einfach</button><button type="button" data-v="1" class="on">Normal</button><button type="button" data-v="2">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span>Controller</span><div id="padtxt">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p">Spiel starten</button><button id="bSet" class="alt" type="button">Einstellungen</button><button id="bHelp" class="alt" type="button">Anleitung</button></div>
+          </div>
+    <div id="ver">v2026-11-23c-r187</div>
   </div>
+  <div id="help" class="overlay" hidden><div class="card"><h1 id="helpT">Anleitung</h1><div id="helpGrid"></div><div class="btns"><button id="helpOk" type="button">OK</button></div></div></div>
   <div id="credits" class="overlay" hidden><div class="card"><h1>Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button">OK</button></div></div></div>
 <button id="muteBtn" type="button" aria-label="Ton an/aus">🔊</button><div id="padhint" hidden></div><div id="rot"><div class="ri">📱</div><div>Bitte das Handy quer halten</div></div>
   <div id="pause" class="overlay" hidden><div class="card"><h1>Pause</h1><div class="btns"><button id="pResume">Weiter</button><button id="pRestart" class="alt">Neustart</button><button id="pSet" class="alt" type="button">Einstellungen</button><button id="pMenu" class="alt">Zurück zum Menü</button></div></div></div>
@@ -2730,7 +2718,7 @@ function pmStep(el,d){
   else if(el.type==='range'){el.value=Math.max(+el.min||0,Math.min(+el.max||100,+el.value+d*(+el.step||5)));el.dispatchEvent(new Event('input',{bubbles:true}));el.dispatchEvent(new Event('change',{bubbles:true}));}
 }
 function padMenu(L,pq,dt){
-  const root=!$('credits').hidden?$('credits'):!$('settings').hidden?$('settings'):!$('pause').hidden?$('pause'):!$('end').hidden?$('end'):!$('menu').hidden?$('menu'):null;
+  const root=!$('help').hidden?$('help'):!$('credits').hidden?$('credits'):!$('settings').hidden?$('settings'):!$('pause').hidden?$('pause'):!$('end').hidden?$('end'):!$('menu').hidden?$('menu'):null;
   if(!root){if(PM_.cur){PM_.cur=null;pmFocus();}return;}
   const items=pmItems(root);if(!items.length)return;
   if(PM_.cur&&PM_.root===root&&!items.includes(PM_.cur)&&PM_.rc){
@@ -3864,7 +3852,13 @@ function frame(now){
 /* ===== Grundausstattung: Texte, Vollbild, Wake Lock, Dreh-Hinweis, Zurück-Taste, Fokus/Pause, Stumm, Controller-Symbole, Grafik Auto, Credits ===== */
 const UI_T={ok:'OK',back:'Zurück',rot:'Bitte das Handy quer halten',mute:'Ton an/aus',credTitle:'Credits',
  cred:['Musik &amp; Sounds: im Spiel erzeugt (Web Audio)','Logo-Schrift: Luckiest Guy – Astigmatic (Apache 2.0)','3D-Grafik: three.js (MIT)'],
- teamsClose:b=>'R3 / '+b+' zum Schließen',teamsCloseKey:'H zum Schließen'};
+ teamsClose:b=>'R3 / '+b+' zum Schließen',teamsCloseKey:'H zum Schließen',
+ helpBtn:'Anleitung',
+ helpGoal:['Ziel','Die Teams spielen reihum. Wer zuletzt noch Figuren hat, gewinnt.'],
+ helpMove:'Laufen',helpAim:'Zielen',helpFire:'Schießen',helpJump:'Springen',helpWeap:'Waffe & Kamera',
+ helpTouch:{move:'Joystick links',aim:'Auf dem Bild wischen',fire:'Feuer halten = laden, loslassen = Schuss',jump:'Sprung-Knopf',weap:'Waffe-Knopf, Kamera-Knopf'},
+ helpKey:{move:'W A S D',aim:'Maus oder Pfeiltasten',fire:'Maus oder Leertaste halten, loslassen = Schuss',jump:'Enter (Salto: B)',weap:'1–0 oder Tab · Kamera Q E / C'},
+ helpPad:()=>({move:'Linker Stick',aim:'Rechter Stick',fire:psgH('r2')+' halten, loslassen = Schuss',jump:psgH('a')+' Sprung · '+psgH('b')+' Salto',weap:psgH('y')+' Waffenrad'})};
 function padIsPS(){const L=padList();const g=L.find(p=>p.index===padLast)||L[0];return !!g&&/054c|dualshock|dualsense|wireless controller|playstation/i.test(g.id||'');}
 /* Tastenname passend zum Controller (PS: ✕○□△ L1…, sonst Xbox: A B X Y LB…) */
 function PB(k){const ps=padIsPS(),m={a:['✕','A'],b:['○','B'],x:['□','X'],y:['△','Y'],l1:['L1','LB'],r1:['R1','RB'],l2:['L2','LT'],r2:['R2','RT']}[k];return m?m[ps?0:1]:k;}
@@ -3880,6 +3874,7 @@ let WLK=null;function wakeOn(){try{if(WLK||document.hidden||!('wakeLock'in navig
 /* Zurück-Taste: Verlauf erst nach erster Eingabe anlegen, dann bei jedem Zurück neu */
 let histOn=false;function armHist(){if(histOn)return;histOn=true;try{history.pushState({bk:1},'');}catch(e){}}
 function backAct(){
+ if(!$('help').hidden){$('help').hidden=true;return;}
  if(!$('credits').hidden){$('credits').hidden=true;return;}
  if(!$('settings').hidden){closeSettings();return;}
  if($('teams').classList.contains('open')){$('teams').classList.remove('open');if(st.mode==='play'&&!paused)setPause(true);return;}
@@ -3893,6 +3888,7 @@ function appAway(){const away=document.hidden||!document.hasFocus();
  if(away){if(st.mode==='play')setPause(true);for(const k in keys)keys[k]=false;}
  if(AC){try{if(away)AC.suspend();else AC.resume();}catch(e){}}
  if(!away)wakeOn();}
+{const mz=()=>{const s=Math.max(1,Math.min(innerHeight/412,innerWidth/915));document.documentElement.style.setProperty("--mz",s.toFixed(3));};mz();addEventListener("resize",mz);}
 ['pagehide','pageshow','blur','focus'].forEach(n=>addEventListener(n,appAway));document.addEventListener('visibilitychange',appAway);
 /* Dreh-Hinweis: Hochformat am Handy gesperrt, laufendes Spiel pausiert */
 {const mq=matchMedia('(orientation:portrait) and (pointer:coarse)');const f=()=>{if(mq.matches&&st.mode==='play')setPause(true);};try{mq.addEventListener('change',f);}catch(e){mq.addListener(f);}f();}
@@ -3907,6 +3903,8 @@ addEventListener('keydown',e=>{if(e.code==='KeyM'&&!e.repeat&&st.mode!=='play')m
 /* Credits: Tippen auf die Versionsnummer */
 $('credList').innerHTML=UI_T.cred.map(t=>'<li>'+t+'</li>').join('');
 $('ver').addEventListener('click',()=>{$('credits').hidden=false;});$('credOk').addEventListener('click',()=>{$('credits').hidden=true;});
+function openHelp(){const hp=padList().length>0,tc=matchMedia('(pointer:coarse)').matches,T=hp?UI_T.helpPad():tc?UI_T.helpTouch:UI_T.helpKey,G=UI_T.helpGoal;$('helpT').textContent=UI_T.helpBtn;$('helpGrid').innerHTML='<div><b>'+G[0]+'</b>'+G[1]+'</div>'+[['helpMove','move'],['helpAim','aim'],['helpFire','fire'],['helpJump','jump'],['helpWeap','weap']].map(a=>'<div><b>'+UI_T[a[0]]+'</b>'+T[a[1]]+'</div>').join('');$('help').hidden=false;}
+$('bHelp').addEventListener('click',openHelp);$('helpOk').addEventListener('click',()=>{$('help').hidden=true;});
 /* Grafik Auto: startet hoch (Handy: mittel) und geht runter, wenn es ruckelt */
 let afN=0,afT=0,afLast=0,afWait=3;
 function autoGfx(t){requestAnimationFrame(autoGfx);const dt=Math.min(.25,(t-(afLast||t))/1000);afLast=t;
@@ -3920,7 +3918,7 @@ function baseTick(){
  if(muted!==lastMuted){lastMuted=muted;$('muteBtn').textContent=muted?'🔇':'🔊';try{localStorage.setItem('bbmute',muted?'1':'0');}catch(e){}}
  const inGame=st.mode==='play'&&!paused,hasPad=padList().length>0;
  $('muteBtn').hidden=inGame||!!$('title');
- const ov=['credits','settings','pause','end','menu'].map($).find(o=>o&&!o.hidden);
+ const ov=['help','credits','settings','pause','end','menu'].map($).find(o=>o&&!o.hidden);
  let show=hasPad&&!$('title')&&ov&&ov.id!=='settings';
  if(show){const c=ov.querySelector('.card');if(c&&c.scrollHeight>c.clientHeight+2)show=false;}
  const hp=$('padhint');if(show){const h=psgH('a')+' '+UI_T.ok+' · '+psgH('b')+' '+UI_T.back;if(hp.dataset.h!==h){hp.dataset.h=h;hp.innerHTML=h;}}hp.hidden=!show;
