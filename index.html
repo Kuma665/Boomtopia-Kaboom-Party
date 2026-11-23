@@ -31,6 +31,7 @@ body.haspad #touch{display:none!important}
 .card h1.logo svg{display:block;width:100%;height:auto;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45));animation:logoPop 3.2s ease-in-out infinite}
 @keyframes logoPop{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(.5deg) scale(1.02)}}
 @media (prefers-reduced-motion:reduce){.card h1.logo svg{animation:none}}
+@media (orientation:landscape){.overlay:not(#menu):not(#help) .card{box-sizing:border-box;zoom:var(--mz,1);max-height:calc((100vh - 32px)/var(--mz,1))}#ver{font-size:calc(11px*var(--mz,1))}}
 </style></head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -359,7 +360,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 </svg></h1>
       <div class="optgrid"><div class="opt"><span>Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span>Würmer pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span>Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on">Zufall</button><button data-v="0">Insel</button><button data-v="1">Archipel</button><button data-v="2">Schlucht</button><button data-v="3">Felsnadeln</button></div></div><div class="opt"><span>Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on">Zufall</button><button data-v="0">Wiese</button><button data-v="1">Schnee</button><button data-v="2">Wüste</button><button data-v="3">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span>Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0">Einfach</button><button type="button" data-v="1" class="on">Normal</button><button type="button" data-v="2">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span>Controller</span><div id="padtxt">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p">Spiel starten</button><button id="bSet" class="alt" type="button">Einstellungen</button><button id="bHelp" class="alt" type="button">Anleitung</button></div>
           </div>
-    <div id="ver">v2026-11-23c-r187</div>
+    <div id="ver">v2026-11-23d-r187</div>
   </div>
   <div id="help" class="overlay" hidden><div class="card"><h1 id="helpT">Anleitung</h1><div id="helpGrid"></div><div class="btns"><button id="helpOk" type="button">OK</button></div></div></div>
   <div id="credits" class="overlay" hidden><div class="card"><h1>Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button">OK</button></div></div></div>
