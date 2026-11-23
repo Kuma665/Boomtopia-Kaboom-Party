@@ -372,7 +372,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
         <dt>Mehrere Controller</dt><dd>Pro Team Steuerung wählen (🎮 1–4). Jeder spielt nur im eigenen Zug.</dd>
       </dl></details>
     </div>
-    <div id="ver">v2026-11-23-r187</div>
+    <div id="ver">v2026-11-23b-r187</div>
   </div>
   <div id="credits" class="overlay" hidden><div class="card"><h1>Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button">OK</button></div></div></div>
 <button id="muteBtn" type="button" aria-label="Ton an/aus">🔊</button><div id="padhint" hidden></div><div id="rot"><div class="ri">📱</div><div>Bitte das Handy quer halten</div></div>
@@ -2694,7 +2694,7 @@ function curPad(L){
   return L[+inp]||null;
 }
 function vibOn(){const b=document.querySelector('.chips[data-k=vib] .on');return !b||b.dataset.v!=='0';}
-function rumble(d,m){if(!vibOn())return;const g=curPad();if(g&&g.vibrationActuator)try{g.vibrationActuator.playEffect('dual-rumble',{duration:d,strongMagnitude:m,weakMagnitude:m*.7});}catch(_){}}
+function rumble(d,m){if(!vibOn())return;const g=curPad();if(g&&g.vibrationActuator)try{g.vibrationActuator.playEffect('dual-rumble',{duration:d,strongMagnitude:m,weakMagnitude:m*.7});}catch(_){}else if(!g&&navigator.vibrate&&!document.hidden)try{navigator.vibrate(Math.max(10,Math.min(400,Math.round(d*(.4+m*.6)))));}catch(_){}}
 function padKey(k,on){if(on){keys[k]=true;padHeld[k]=true;}else if(padHeld[k]){keys[k]=false;padHeld[k]=false;}}
 /* Controller-Navigation in allen Menüs (Hauptmenü, Pause, Ende): D-Pad/Stick bewegt den Fokus, A wählt, B zurück, Start = los/weiter, L1/R1 = Wert ändern */
 const PM_={cur:null,root:null,dk:'',t:0};
