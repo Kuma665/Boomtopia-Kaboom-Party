@@ -313,7 +313,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
   <div id="turn" class="panel" hidden><div class="who" id="who"></div><div id="hp"><b id="hpv">100</b><span class="cross">✚</span><div class="hbar"><i id="hpb"></i></div></div><div class="time" id="time">30</div><div id="nx"></div><div id="sd"></div></div>
   <div id="wind" class="panel" hidden>
     <svg id="windArrow" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 L31 19 H23 V37 H17 V19 H9 Z" fill="currentColor"/></svg>
-    <div><span>Wind</span><b id="windVal">0</b></div>
+    <div><span data-t="wind">Wind</span><b id="windVal">0</b></div>
   </div>
   <svg id="pdial" viewBox="0 0 100 100" hidden><path d="M22 6 A 46 46 0 0 1 22 94 Z" fill="#1d86b3" stroke="#0b2f42" stroke-width="5" stroke-linejoin="round"/><g id="pneedle"><line x1="22" y1="50" x2="72" y2="50" stroke="#ffc21a" stroke-width="5" stroke-linecap="round"/><path d="M82 50 L68 41 L68 59 Z" fill="#ffc21a"/></g><circle cx="22" cy="50" r="8" fill="#e23b3b" stroke="#0b2f42" stroke-width="3"/><text id="pdeg" x="99" y="98" text-anchor="end" font-family="'Lilita One',system-ui,sans-serif" font-size="19" fill="#ffc21a" stroke="#0b2f42" stroke-width="5" paint-order="stroke" stroke-linejoin="round">0°</text></svg>
   <div id="fpn" style="display:none"></div><div id="fpx" style="display:none"><div class="fc"><u></u><u></u><u></u><u></u><s></s><s></s></div><div class="fi"></div></div><div id="fpb"><i></i><i></i><i></i><i></i><i></i><em id="fpa"></em></div>
@@ -323,7 +323,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
   <div id="touch" hidden>
     <div id="joy"><i></i></div>
     
-    <div class="acts"><button id="tJump">Sprung</button><button id="tWeap">Waffe</button><button id="tFire">Feuer</button><button id="tCam">Kamera</button></div>
+    <div class="acts"><button id="tJump" data-t="jump">Sprung</button><button id="tWeap" data-t="weapon">Waffe</button><button id="tFire" data-t="fire">Feuer</button><button id="tCam" data-t="camera">Kamera</button></div>
   </div>
   <div id="bottom" hidden>
   <div id="power"><i id="powerFill"></i><b id="powerLast"></b></div>
@@ -358,20 +358,20 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 </g>
 <g transform="translate(52 78) rotate(12)"><path d="M0 -17 L4.8 -4.8 L17 0 L4.8 4.8 L0 17 L-4.8 4.8 L-17 0 L-4.8 -4.8 Z" fill="#fff" stroke="#fff" stroke-width="12" stroke-linejoin="round"/><path d="M0 -17 L4.8 -4.8 L17 0 L4.8 4.8 L0 17 L-4.8 4.8 L-17 0 L-4.8 -4.8 Z" fill="#2a0c06" stroke="#2a0c06" stroke-width="6" stroke-linejoin="round"/><path d="M0 -17 L4.8 -4.8 L17 0 L4.8 4.8 L0 17 L-4.8 4.8 L-17 0 L-4.8 -4.8 Z" fill="#ffd23f"/></g><g transform="translate(632 72) rotate(-10)"><path d="M0 -15 L4.2 -4.2 L15 0 L4.2 4.2 L0 15 L-4.2 4.2 L-15 0 L-4.2 -4.2 Z" fill="#fff" stroke="#fff" stroke-width="12" stroke-linejoin="round"/><path d="M0 -15 L4.2 -4.2 L15 0 L4.2 4.2 L0 15 L-4.2 4.2 L-15 0 L-4.2 -4.2 Z" fill="#2a0c06" stroke="#2a0c06" stroke-width="6" stroke-linejoin="round"/><path d="M0 -15 L4.2 -4.2 L15 0 L4.2 4.2 L0 15 L-4.2 4.2 L-15 0 L-4.2 -4.2 Z" fill="#ffd23f"/></g><g transform="translate(40 236) rotate(0)"><path d="M0 -13 L3.6 -3.6 L13 0 L3.6 3.6 L0 13 L-3.6 3.6 L-13 0 L-3.6 -3.6 Z" fill="#fff" stroke="#fff" stroke-width="12" stroke-linejoin="round"/><path d="M0 -13 L3.6 -3.6 L13 0 L3.6 3.6 L0 13 L-3.6 3.6 L-13 0 L-3.6 -3.6 Z" fill="#2a0c06" stroke="#2a0c06" stroke-width="6" stroke-linejoin="round"/><path d="M0 -13 L3.6 -3.6 L13 0 L3.6 3.6 L0 13 L-3.6 3.6 L-13 0 L-3.6 -3.6 Z" fill="#ff8a1f"/></g><circle cx="34" cy="150" r="6" fill="#fff" stroke="#fff" stroke-width="9"/><circle cx="34" cy="150" r="6" fill="#ff8a1f" stroke="#2a0c06" stroke-width="5"/><circle cx="650" cy="140" r="5" fill="#fff" stroke="#fff" stroke-width="9"/><circle cx="650" cy="140" r="5" fill="#ffd23f" stroke="#2a0c06" stroke-width="5"/><circle cx="600" cy="50" r="5" fill="#fff" stroke="#fff" stroke-width="9"/><circle cx="600" cy="50" r="5" fill="#ff8a1f" stroke="#2a0c06" stroke-width="5"/>
 </svg></h1>
-      <div class="optgrid"><div class="opt"><span>Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span>Würmer pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span>Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on">Zufall</button><button data-v="0">Insel</button><button data-v="1">Archipel</button><button data-v="2">Schlucht</button><button data-v="3">Felsnadeln</button></div></div><div class="opt"><span>Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on">Zufall</button><button data-v="0">Wiese</button><button data-v="1">Schnee</button><button data-v="2">Wüste</button><button data-v="3">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span>Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0">Einfach</button><button type="button" data-v="1" class="on">Normal</button><button type="button" data-v="2">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span>Controller</span><div id="padtxt">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p">Spiel starten</button><button id="bSet" class="alt" type="button">Einstellungen</button><button id="bHelp" class="alt" type="button">Anleitung</button></div>
+      <div class="optgrid"><div class="opt"><span data-t="teams">Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span data-t="wormsPer">Würmer pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span data-t="map">Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="island">Insel</button><button data-v="1" data-t="archi">Archipel</button><button data-v="2" data-t="gorge">Schlucht</button><button data-v="3" data-t="spires">Felsnadeln</button></div></div><div class="opt"><span data-t="land">Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="meadow">Wiese</button><button data-v="1" data-t="snow">Schnee</button><button data-v="2" data-t="desert">Wüste</button><button data-v="3" data-t="volcano">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span data-t="cpuStr">Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0" data-t="easy">Einfach</button><button type="button" data-v="1" class="on" data-t="normal">Normal</button><button type="button" data-v="2" data-t="hard">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span data-t="controller">Controller</span><div id="padtxt" data-t="noPad">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p" data-t="start">Spiel starten</button><button id="bSet" class="alt" type="button" data-t="settings">Einstellungen</button><button id="bHelp" class="alt" type="button" data-t="help">Anleitung</button></div>
           </div>
-    <div id="ver">v2026-11-23d-r187</div>
+    <div id="ver">v2026-11-23e-r187</div>
   </div>
-  <div id="help" class="overlay" hidden><div class="card"><h1 id="helpT">Anleitung</h1><div id="helpGrid"></div><div class="btns"><button id="helpOk" type="button">OK</button></div></div></div>
-  <div id="credits" class="overlay" hidden><div class="card"><h1>Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button">OK</button></div></div></div>
-<button id="muteBtn" type="button" aria-label="Ton an/aus">🔊</button><div id="padhint" hidden></div><div id="rot"><div class="ri">📱</div><div>Bitte das Handy quer halten</div></div>
-  <div id="pause" class="overlay" hidden><div class="card"><h1>Pause</h1><div class="btns"><button id="pResume">Weiter</button><button id="pRestart" class="alt">Neustart</button><button id="pSet" class="alt" type="button">Einstellungen</button><button id="pMenu" class="alt">Zurück zum Menü</button></div></div></div>
-  <div id="settings" class="overlay" hidden><div class="card"><h1>Einstellungen</h1><div class="optgrid"><div class="opt"><span>Musik</span><input type="range" class="vol" data-k="m" min="0" max="100" value="100" aria-label="Musik-Lautstärke"></div><div class="opt"><span>Soundeffekte</span><input type="range" class="vol" data-k="s" min="0" max="100" value="100" aria-label="Soundeffekte-Lautstärke"></div><div class="opt"><span>Meteoritenregen</span><div class="chips" data-k="meteor"><button type="button" data-v="1" class="on">An</button><button type="button" data-v="0">Aus</button></div></div><div class="opt"><span>Sudden Death</span><div class="chips" data-k="sd"><button type="button" data-v="1" class="on">An</button><button type="button" data-v="0">Aus</button></div></div><div class="opt"><span>Starke Items erst später</span><div class="chips" data-k="late"><button type="button" data-v="1" class="on">An</button><button type="button" data-v="0">Aus</button></div></div><div class="opt"><span>Kommentator</span><div class="chips" data-k="cmt"><button type="button" data-v="1" class="on">An</button><button type="button" data-v="0">Aus</button></div></div><div class="opt"><span>Comic-Look</span><div class="chips" data-k="comic"><button type="button" data-v="1">An</button><button type="button" data-v="0" class="on">Aus</button></div></div><div class="opt"><span>Stick-Empfindlichkeit: <b id="vss">100%</b></span><input type="range" class="sens" data-k="ss" min="25" max="200" step="5" value="100" aria-label="Stick-Empfindlichkeit"></div><div class="opt"><span>Maus-Empfindlichkeit: <b id="vms">100%</b></span><input type="range" class="sens" data-k="ms" min="25" max="200" step="5" value="100" aria-label="Maus-Empfindlichkeit"></div><div class="opt"><span>Y-Achse invertieren</span><div class="chips" data-k="invy"><button type="button" data-v="0" class="on">Aus</button><button type="button" data-v="1">An</button></div></div><div class="opt"><span>Grafik</span><div class="chips" data-k="gfx"><button type="button" data-v="0">Auto</button><button type="button" data-v="1" class="on">Hoch</button><button type="button" data-v="2">Mittel</button><button type="button" data-v="3">Niedrig</button></div></div><div class="opt"><span>Vibration</span><div class="chips" data-k="vib"><button type="button" data-v="1" class="on">An</button><button type="button" data-v="0">Aus</button></div></div><div class="opt"><span>Fallschaden beendet den Zug</span><div class="chips" data-k="fall"><button type="button" data-v="1" class="on">An</button><button type="button" data-v="0">Aus</button></div></div><div class="opt"><span>Zielhilfe</span><div class="chips" data-k="aim"><button type="button" data-v="0">Aus</button><button type="button" data-v="1" class="on">Kurz</button><button type="button" data-v="2">Voll</button></div></div><div class="opt"><span>Flugbahn vor dem Laden</span><div class="chips" data-k="pre"><button type="button" data-v="1" class="on">Aus</button><button type="button" data-v="2">An</button></div></div><div class="opt"><span>Ego-Sicht beim Laden</span><div class="chips" data-k="ego"><button type="button" data-v="1" class="on">Automatisch</button><button type="button" data-v="2">Aus (nur L2 / Z)</button></div></div><div class="opt"><span>Blut &amp; Verkohlung</span><div class="chips" data-k="gore"><button type="button" data-v="0">Aus</button><button type="button" data-v="1" class="on">Wenig</button><button type="button" data-v="2">Brutal</button></div></div></div><div class="btns"><button id="sBack" type="button">Zurück</button></div></div></div>
+  <div id="help" class="overlay" hidden><div class="card"><h1 id="helpT" data-t="help">Anleitung</h1><div id="helpGrid"></div><div class="btns"><button id="helpOk" type="button" data-t="ok">OK</button></div></div></div>
+  <div id="credits" class="overlay" hidden><div class="card"><h1 data-t="credits">Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button" data-t="ok">OK</button></div></div></div>
+<button id="muteBtn" type="button" aria-label="Ton an/aus">🔊</button><div id="padhint" hidden></div><div id="rot"><div class="ri">📱</div><div data-t="rotate">Bitte das Handy quer halten</div></div>
+  <div id="pause" class="overlay" hidden><div class="card"><h1 data-t="pause">Pause</h1><div class="btns"><button id="pResume" data-t="resume">Weiter</button><button id="pRestart" class="alt" data-t="restart">Neustart</button><button id="pSet" class="alt" type="button" data-t="settings">Einstellungen</button><button id="pMenu" class="alt" data-t="toMenu">Zurück zum Menü</button></div></div></div>
+  <div id="settings" class="overlay" hidden><div class="card"><h1 data-t="settings">Einstellungen</h1><div class="optgrid"><div class="opt"><span>Musik</span><input type="range" class="vol" data-k="m" min="0" max="100" value="100" aria-label="Musik-Lautstärke"></div><div class="opt"><span>Soundeffekte</span><input type="range" class="vol" data-k="s" min="0" max="100" value="100" aria-label="Soundeffekte-Lautstärke"></div><div class="opt"><span>Meteoritenregen</span><div class="chips" data-k="meteor"><button type="button" data-v="1" class="on">An</button><button type="button" data-v="0">Aus</button></div></div><div class="opt"><span>Sudden Death</span><div class="chips" data-k="sd"><button type="button" data-v="1" class="on">An</button><button type="button" data-v="0">Aus</button></div></div><div class="opt"><span>Starke Items erst später</span><div class="chips" data-k="late"><button type="button" data-v="1" class="on">An</button><button type="button" data-v="0">Aus</button></div></div><div class="opt"><span>Kommentator</span><div class="chips" data-k="cmt"><button type="button" data-v="1" class="on">An</button><button type="button" data-v="0">Aus</button></div></div><div class="opt"><span>Comic-Look</span><div class="chips" data-k="comic"><button type="button" data-v="1">An</button><button type="button" data-v="0" class="on">Aus</button></div></div><div class="opt"><span>Stick-Empfindlichkeit: <b id="vss">100%</b></span><input type="range" class="sens" data-k="ss" min="25" max="200" step="5" value="100" aria-label="Stick-Empfindlichkeit"></div><div class="opt"><span>Maus-Empfindlichkeit: <b id="vms">100%</b></span><input type="range" class="sens" data-k="ms" min="25" max="200" step="5" value="100" aria-label="Maus-Empfindlichkeit"></div><div class="opt"><span>Y-Achse invertieren</span><div class="chips" data-k="invy"><button type="button" data-v="0" class="on">Aus</button><button type="button" data-v="1">An</button></div></div><div class="opt"><span>Grafik</span><div class="chips" data-k="gfx"><button type="button" data-v="0">Auto</button><button type="button" data-v="1" class="on">Hoch</button><button type="button" data-v="2">Mittel</button><button type="button" data-v="3">Niedrig</button></div></div><div class="opt"><span>Vibration</span><div class="chips" data-k="vib"><button type="button" data-v="1" class="on">An</button><button type="button" data-v="0">Aus</button></div></div><div class="opt"><span>Fallschaden beendet den Zug</span><div class="chips" data-k="fall"><button type="button" data-v="1" class="on">An</button><button type="button" data-v="0">Aus</button></div></div><div class="opt"><span>Zielhilfe</span><div class="chips" data-k="aim"><button type="button" data-v="0">Aus</button><button type="button" data-v="1" class="on">Kurz</button><button type="button" data-v="2">Voll</button></div></div><div class="opt"><span>Flugbahn vor dem Laden</span><div class="chips" data-k="pre"><button type="button" data-v="1" class="on">Aus</button><button type="button" data-v="2">An</button></div></div><div class="opt"><span>Ego-Sicht beim Laden</span><div class="chips" data-k="ego"><button type="button" data-v="1" class="on">Automatisch</button><button type="button" data-v="2">Aus (nur L2 / Z)</button></div></div><div class="opt"><span>Blut &amp; Verkohlung</span><div class="chips" data-k="gore"><button type="button" data-v="0">Aus</button><button type="button" data-v="1" class="on">Wenig</button><button type="button" data-v="2">Brutal</button></div></div></div><div class="btns"><button id="sBack" type="button">Zurück</button></div></div></div>
   <div id="end" class="overlay" hidden>
     <div class="card">
       <h1 id="endTitle"></h1>
       <p id="endSub"></p>
-      <div class="btns"><button id="again">Nochmal</button><button id="again2" class="alt">Neue Karte</button><button id="tomenu" class="alt">Menü</button></div>
+      <div class="btns"><button id="again" data-t="again">Nochmal</button><button id="again2" class="alt" data-t="newMap">Neue Karte</button><button id="tomenu" class="alt" data-t="menu">Menü</button></div>
     </div>
   </div>
 </div>
@@ -1779,7 +1779,7 @@ function stepWorm(w,dt,mx,mz){
       const drop=Math.max(0,(w.pk===undefined?p.y:w.pk)-gh);w.pk=undefined;w.bf=false;
       const imp=kb?impact:Math.sqrt(2*G*drop),lim=kb?17:19.5;
       if(imp>lim){const d=Math.round((imp-lim)*3);if(d>0){hurt(w,d,null,0);
-        if(!kb&&w===st.worm&&st.mode==='play'&&st.phase==='aim'&&!st.cpuTurn&&chipOn('fall')){releaseRope();st.phase='fire';st.charging=false;st.power=0;st.retreated=true;st.noFire=true;st.wait=0;toast('Fallschaden! Zug vorbei');}}}
+        if(!kb&&w===st.worm&&st.mode==='play'&&st.phase==='aim'&&!st.cpuTurn&&chipOn('fall')){releaseRope();st.phase='fire';st.charging=false;st.power=0;st.retreated=true;st.noFire=true;st.wait=0;toast(UI_T.toast.fall);}}}
       if(w.jb!==undefined){const ok=clock-w.jb<.15&&w.alive&&w===st.worm&&st.mode==='play'&&!st.cpuTurn&&(st.phase==='aim'||st.fused)&&!paused;w.jb=undefined;if(ok)jump(w);}
     }
   }
@@ -1935,7 +1935,7 @@ function spawnProj(kind,pos,vel,owner){
 function airStrike(pos){
   const rx=Math.cos(camYaw),rz=-Math.sin(camYaw);
   for(let k=-2;k<=2;k++)spawnProj('bom',new V3(pos.x+rx*k*3.4,62+Math.abs(k)*5,pos.z+rz*k*3.4),new V3(0,-25,0),null);
-  toast('Luftschlag!');
+  toast(UI_T.toast.air);
 }
 function removeProj(i){gameGroup.remove(projs[i].m);if(projs[i].gl){gameGroup.remove(projs[i].gl);projs[i].gl.geometry.dispose();projs[i].gl.material.dispose();}projs.splice(i,1);}
 function updateProjs(dt){
@@ -2055,8 +2055,8 @@ function fire(){
   const am=st.ammo&&st.ammo[st.team];
   if(W.id==='rop'){toggleRope(w,mz,dir);return;}
   if(st.rope)releaseRope();
-  if(lockedW(W)){toast(W.name+' erst ab Runde '+LATE_R);return;}
-  if(am&&W.id in am){if(am[W.id]<=0){toast('Keine Munition');return;}am[W.id]--;}
+  if(lockedW(W)){toast(UI_T.toast.lateR(W.name,LATE_R));return;}
+  if(am&&W.id in am){if(am[W.id]<=0){toast(UI_T.toast.noAmmo);return;}am[W.id]--;}
   (st.pT=st.pT||{})[st.team]=st.pitch;w.yaw=st.ay;if(rnd()<.5||!say(w,'aim'))floatText(SAY[W.id]||'',w.pos.clone().add(new V3(0,3.2,0)),'#ffffff');
   if(W.id==='sho'||W.id==='sni'){const sn=W.id==='sni';
     S3('shotgun',mz,55);muzzleFx(mz,dir,W.id);w.rec=1;
@@ -2077,16 +2077,16 @@ function fire(){
     shake=Math.max(shake,W.id==='sni'?.35:.25);
   }else if(W.id==='tel'){
     const sp0=telSpot(mz,dir),ok=!!sp0;if(ok){dust(w.pos,10);telSwirl(w.pos,1);S3('wusch',w.pos,45);w.pos.copy(sp0);w.vel.set(0,0,0);w.onGround=true;dust(w.pos,10);addFlash(w.pos.clone().add(new V3(0,1,0)),1.6,0x9ff0ff);telSwirl(w.pos,0);setTimeout(()=>{S3('zap',w.pos,45);addRing(w.pos.clone().add(new V3(0,.2,0)),2.6);for(let q=0;q<4;q++){const a=rnd()*6.283;addLine(w.pos.clone().add(new V3(0,1.9,0)),w.pos.clone().add(new V3(Math.cos(a)*1.8,.2+rnd()*1.4,Math.sin(a)*1.8)));}shake=Math.max(shake,.35);rumble(160,.6);floatText('Zap!',w.pos.clone().add(new V3(0,2.3,0)),'#9ff0ff');},260);}
-    if(!ok){toast('Kein Ziel getroffen');if(am)am.tel++;st.charging=false;st.power=0;return;}
+    if(!ok){toast(UI_T.toast.noHit);if(am)am.tel++;st.charging=false;st.power=0;return;}
     S_('jump');
   }else if(W.id==='bor'){
-    st.drill={t:0,tk:0,dm:0,w:w};toast('Bohrer l\u00e4uft! Leertaste = Stopp');
+    st.drill={t:0,tk:0,dm:0,w:w};toast(UI_T.toast.drill);
   }else if(W.id==='pun'){
     S_('boom');addFlash(mz.clone().addScaledVector(dir,.8),1.4);
     for(const o of worms){if(o===w||!o.alive)continue;const c=new V3(o.pos.x,o.pos.y+.8,o.pos.z);if(c.distanceTo(mz)<2.6){const d=c.sub(w.pos).setY(0).normalize();d.y=.5;hurt(o,W.dmg,d.normalize(),1);}}
     shake=Math.max(shake,0.25);
   }else if(W.id==='she'){
-    S_('shot');S3('maeh',w.pos,40);toast('Nochmal Feuer = Schaf sprengen');spawnProj('she',w.pos.clone().add(new V3(0,.4,0)),new V3(),w);
+    S_('shot');S3('maeh',w.pos,40);toast(UI_T.toast.sheep);spawnProj('she',w.pos.clone().add(new V3(0,.4,0)),new V3(),w);
     const q=projs[projs.length-1];q.dir=new V3(dir.x,0,dir.z).normalize();q.m.scale.setScalar(1.15);q.m.position.y+=.2;
   }else if(W.id==='min'){
     placeMine(w,dir);
@@ -2098,7 +2098,7 @@ function fire(){
     if(W.id==='dyn')spawnProj('dyn',w.pos.clone().add(new V3(0,.4,0)).addScaledVector(dir,.8),new V3(),w);
     else spawnProj(W.id,mz,dir.multiplyScalar(lerp(W.v0,W.v1,st.power)),w);
   }
-  st.phase='fire';st.wait=0;st.charging=false;st.power=0;st.fused=['gre','hol','dyn','ban','bho'].includes(W.id);if(st.fused&&!st.cpuTurn)toast('Lauf weg!');
+  st.phase='fire';st.wait=0;st.charging=false;st.power=0;st.fused=['gre','hol','dyn','ban','bho'].includes(W.id);if(st.fused&&!st.cpuTurn)toast(UI_T.toast.run);
 }
 
 
@@ -2504,7 +2504,7 @@ function armageddon(){if(st.met||mets.length)return;const k=Math.min(14,st.turns
 function maybeMeteors(){
   if(st.met||mets.length||!meteorOn()||st.turns<3||rnd()>.12)return;
   st.met={delay:4.5,sp:0,total:10+((rnd()*4)|0),tn:0};
-  setTimeout(()=>{if(st.mode==='play'){toast('Meteoritenregen! Achtung!');S_('warn');shake=Math.max(shake,.4);}},1300);
+  setTimeout(()=>{if(st.mode==='play'){toast(UI_T.toast.meteor);S_('warn');shake=Math.max(shake,.4);}},1300);
 }
 function spawnMeteor(){
   const alive=worms.filter(w=>w.alive);let x,z;
@@ -2546,7 +2546,7 @@ const pdots=[];for(let i=0;i<10;i++){const m=new THREE.Mesh(SPH,new THREE.MeshBa
 const trail=[];for(let i=0;i<36;i++){const m=new THREE.Mesh(SPH,new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.75}));m.scale.setScalar(.2);m.add(olin(true));m.visible=false;scene.add(m);trail.push(m);}
 const tmark=new THREE.Mesh(new THREE.RingGeometry(.9,1.25,32),new THREE.MeshBasicMaterial({color:0xff3a3a,transparent:true,opacity:.9,side:THREE.DoubleSide,depthTest:false}));tmark.rotation.x=-Math.PI/2;tmark.renderOrder=9;tmark.visible=false;scene.add(tmark);
 function snapAim(){
-  if(aimLv()===0){toast('Zielhilfe ist aus (Einstellungen)');return;}
+  if(aimLv()===0){toast(UI_T.toast.aimOff);return;}
   const w=st.worm;if(!w||st.phase!=='aim'||st.cpuTurn||st.noFire||paused)return;
   const dist=o=>Math.hypot(o.pos.x-w.pos.x,o.pos.z-w.pos.z),en=worms.filter(o=>o.alive&&o.team!==w.team).sort((a,b)=>dist(a)-dist(b));
   if(!en.length)return;
@@ -2785,7 +2785,7 @@ function pollPad(dt){
   st.padFp=live&&!!(g.buttons[6]&&g.buttons[6].value>.3);
   const th=.38*lm;const wo=wbox.classList.contains('open')&&st.inv!==undefined,nf=live&&!st.free&&!wo;padKey('KeyW',nf&&ly<-th);padKey('KeyS',nf&&ly>th);padKey('KeyA',nf&&lx<-th);padKey('KeyD',nf&&lx>th);
   st.fcf=st.free?-ly:0;st.fcr=st.free?lx:0;st.fcy=st.free?((g.buttons[7]&&g.buttons[7].value||0)-(g.buttons[6]&&g.buttons[6].value||0)):0;
-  if(st.free&&live){camYaw-=rx*2.4*SENS.s*dt;camPitch=Math.max(-1.4,Math.min(1.45,camPitch+ry*1.6*SENS.s*(st.invY?-1:1)*dt));st.rc=0;if(pr(1)){st.free=false;st.fx=true;st.rc=1;st.fcf=st.fcr=st.fcy=0;toast('Kamera folgt wieder');}}
+  if(st.free&&live){camYaw-=rx*2.4*SENS.s*dt;camPitch=Math.max(-1.4,Math.min(1.45,camPitch+ry*1.6*SENS.s*(st.invY?-1:1)*dt));st.rc=0;if(pr(1)){st.free=false;st.fx=true;st.rc=1;st.fcf=st.fcr=st.fcy=0;toast(UI_T.toast.camBack);}}
   st.walk=live&&lm>0&&!st.free&&!wo;const slow=(g.buttons[6]&&g.buttons[6].value>.3?.35:1)*(st.walk?.6:1)*(st.charging?.3:1);
   st.padAim=live&&st.phase==='aim'&&rm>0&&!st.free&&!wo&&!bfLock();
   st.padT=st.padAim?0:(st.padT===undefined?99:st.padT+dt);if(!st.padAim)st.pAcc=0;
@@ -2807,7 +2807,7 @@ function pollPad(dt){
     if(st.phase==='fire'&&st.fused&&pr(0))jump(st.worm);
     if(st.phase==='aim'&&!st.free){
       if(pr(0))jump(st.worm);
-      if(pr(1)&&!st.fx){if(st.charging){st.charging=false;st.power=0;toast('Schuss abgebrochen');}else if($('teams').classList.contains('open'))$('teams').classList.remove('open');else backflip(st.worm);}
+      if(pr(1)&&!st.fx){if(st.charging){st.charging=false;st.power=0;toast(UI_T.toast.cancel);}else if($('teams').classList.contains('open'))$('teams').classList.remove('open');else backflip(st.worm);}
       if(pr(10))snapAim();
       if(pr(15)||pr(5))selectWeapon(nextUsable(1));if(pr(3)){wbox.classList.add('open');st.inv=st.wp;}
       if(pr(14)||pr(4))selectWeapon(nextUsable(-1));
@@ -2818,7 +2818,7 @@ function pollPad(dt){
   }
   padPrevs[g.index]=g.buttons.map(b=>b.pressed);
 }
-window.addEventListener('gamepadconnected',e=>{const ps=/054c|dualshock|dualsense|wireless controller|playstation/i.test(e.gamepad.id||'');st.ps=ps;toast(ps?'PS-Controller verbunden':'Controller verbunden');if(ps){const dt=[...document.querySelectorAll('.keys dt')].find(x=>x.textContent==='Controller');if(dt)dt.nextElementSibling.textContent='Sticks laufen und zielen, ✕ Sprung (Stick = Richtung, in der Luft steuerbar), ○ Rückwärtssalto (beim Laden: Schuss abbrechen), L2 halten = Ego-Zielen, R2 kurz = Schuss mit Vorwahl / halten = laden, Steuerkreuz ↑↓ antippen = Kraft (halten = Zoom), △ Waffenrad (Stick wählen, ✕ bestätigen)';}});
+window.addEventListener('gamepadconnected',e=>{const ps=/054c|dualshock|dualsense|wireless controller|playstation/i.test(e.gamepad.id||'');st.ps=ps;toast(UI_T.toast.padOn(ps));if(ps){const dt=[...document.querySelectorAll('.keys dt')].find(x=>x.textContent==='Controller');if(dt)dt.nextElementSibling.textContent='Sticks laufen und zielen, ✕ Sprung (Stick = Richtung, in der Luft steuerbar), ○ Rückwärtssalto (beim Laden: Schuss abbrechen), L2 halten = Ego-Zielen, R2 kurz = Schuss mit Vorwahl / halten = laden, Steuerkreuz ↑↓ antippen = Kraft (halten = Zoom), △ Waffenrad (Stick wählen, ✕ bestätigen)';}});
 function updatePadInfo(){const L=padList(),e=$('padtxt');if(e){e.parentNode.hidden=!L.length;e.textContent=L.length?L.length+' verbunden: '+L.map((p,i)=>'🎮'+(i+1)).join(' '):'keiner erkannt – Taste am Controller drücken';}}
 window.addEventListener('gamepadconnected',updatePadInfo);window.addEventListener('gamepaddisconnected',updatePadInfo);updatePadInfo();
 
@@ -2834,7 +2834,7 @@ function bananaSplit(p){
     spawnProj('bmi',p.pos.clone().add(new V3(0,.3,0)),new V3(Math.cos(a)*sp_,7+rnd()*4,Math.sin(a)*sp_),p.owner);
     projs[projs.length-1].age=1.6+rnd()*.5;
   }
-  toast('Bananen!');
+  toast(UI_T.toast.banana);
 }
 function mineModel(){
   const g=new THREE.Group();
@@ -2851,7 +2851,7 @@ function placeMine(w,dir){
   const x=w.pos.x+dir.x*1.4,z=w.pos.z+dir.z*1.4;
   const m=mineModel(),led=m.userData.led;
   m.position.set(x,hAt(x,z)+.14,z);gameGroup.add(m);
-  mines.push({pos:m.position,m,age:0,led});S_('tick');toast('Mine gelegt');
+  mines.push({pos:m.position,m,age:0,led});S_('tick');toast(UI_T.toast.mine);
 }
 function crateModel(hp){
   const g=new THREE.Group(),wood=0x9a6a3a,dark=0x6e4824,col=hp?0x4bd35a:0xffc83a;
@@ -2878,7 +2878,7 @@ function maybeCrate(){
     if(hAt(x,z)>WATER+1.6){
       const hp=rnd()<.5,m=crateModel(hp);
       m.position.set(x,55,z);gameGroup.add(m);
-      crates.push({pos:m.position,m,hp,vy:0});toast(hp?'Gesundheitskiste fällt!':'Waffenkiste fällt!');return;
+      crates.push({pos:m.position,m,hp,vy:0});toast(UI_T.toast.crate(hp));return;
     }
   }
 }
@@ -2934,7 +2934,7 @@ function spawnHole(pos){
   const gy=Math.max(hAt(pos.x,pos.z),WATER),P=new V3(pos.x,gy+2.4,pos.z);
   g.position.copy(P);g.scale.setScalar(.01);scene.add(g);
   holes.push({g,d1,d2,pos:P,gy,t:0,dur:4.6,ct:0,R:19});
-  S_('hole');toast('Schwarzes Loch!');
+  S_('hole');toast(UI_T.toast.hole);
 }
 function updateHoles(dt){
   if(st.mode!=='play'){if(holes.length){for(const h of holes)scene.remove(h.g);holes=[];holeL.intensity=0;}return;}
@@ -2977,7 +2977,7 @@ function updateHoles(dt){
     if(h.t>=h.dur){
       scene.remove(h.g);holes.splice(i,1);if(!holes.length)holeL.intensity=0;
       const e=new V3(P.x,Math.max(hAt(P.x,P.z),WATER)+.6,P.z);
-      S_('implode');addRing(e,6);setTimeout(()=>addRing(e,10),150);explode(e,BHW);toast('Implosion!');
+      S_('implode');addRing(e,6);setTimeout(()=>addRing(e,10),150);explode(e,BHW);toast(UI_T.toast.implode);
     }
   }
 }
@@ -3010,11 +3010,11 @@ function ropeBlock(a,b){
 function toggleRope(w,mz,dir){
   if(st.rope){releaseRope();return;}
   const hit=ropeSpot(mz,dir);
-  if(!hit){toast('Kein Halt');S_('klonk');return;}
+  if(!hit){toast(UI_T.toast.noGrip);S_('klonk');return;}
   const c=new V3(w.pos.x,w.pos.y+RH,w.pos.z);
   st.rope={a:hit,len:Math.max(4,c.distanceTo(hit)),t:0,sh:0,stack:[]};
   w.vel.y=Math.max(w.vel.y,8);w.onGround=false;S_('ropeShot');
-  if(!st.ropeHint){st.ropeHint=1;toast('Seil! W ranziehen, S ablassen, A/D schwingen, Enter loslassen');}
+  if(!st.ropeHint){st.ropeHint=1;toast(UI_T.toast.rope);}
 }
 function releaseRope(b){
   if(!st.rope)return;
@@ -3084,9 +3084,9 @@ function startTurn(){releaseRope();
   st.look=w.pos.clone();
   st.noFire=false;st.retreated=false;st.fused=false;st.dmgTurn=0;st.dE=st.dS=st.kE=st.kS=0;
   st.turns=(st.turns||0)+1;
-  if(sdOn()&&st.turns>st.n*5*st.nt){st.waterT=Math.min(22,st.waterT+1);if(st.turns===st.n*5*st.nt+1)setTimeout(()=>cmt('sd')||toast('Sudden Death + Armageddon: '+TH.liqC+' steigt, Meteoriten fallen!'),1300);armageddon();}
-  {const am=st.ammo&&st.ammo[st.team],cw=WEAPONS[st.wp];if(am&&cw.id in am&&am[cw.id]<=0)st.wp=0;if(lockedW(cw))st.wp=0;}toast(st.firstTurn?st.mapName:w.name+' ist dran');st.firstTurn=false;maybeCrate();
-  {const inp=TEAMS[st.team].input;if(/^\d$/.test(inp)&&!padList()[+inp])setTimeout(()=>toast('Controller '+(+inp+1)+' fehlt – Tastatur geht'),1400);}
+  if(sdOn()&&st.turns>st.n*5*st.nt){st.waterT=Math.min(22,st.waterT+1);if(st.turns===st.n*5*st.nt+1)setTimeout(()=>cmt('sd')||toast(UI_T.toast.sdArm(TH.liqC)),1300);armageddon();}
+  {const am=st.ammo&&st.ammo[st.team],cw=WEAPONS[st.wp];if(am&&cw.id in am&&am[cw.id]<=0)st.wp=0;if(lockedW(cw))st.wp=0;}toast(st.firstTurn?st.mapName:UI_T.toast.turn(w.name));st.firstTurn=false;maybeCrate();
+  {const inp=TEAMS[st.team].input;if(/^\d$/.test(inp)&&!padList()[+inp])setTimeout(()=>toast(UI_T.toast.padMiss(+inp+1)),1400);}
   if(st.cpuTurn)planAI();
   maybeMeteors();
   hudDirty=true;
@@ -3131,7 +3131,7 @@ function startGame(same){
   st.ammo=Array.from({length:st.nt},()=>({hol:1,dyn:2,air:1,pun:3,ban:2,min:2,she:1,sni:3,tel:1,bor:3,bho:1}));clearExtras();clearFoot();spawnProps();rndSrc=Math.random;st.wpT=new Array(st.nt).fill(0);st.turns=0;st.firstTurn=true;st.mode='play';st.team=0;st.wi=new Array(st.nt).fill(-1);st.hitT=0;shake=0;
   $('menu').hidden=true;$('end').hidden=true;
   $('tbar').hidden=false;$('turn').hidden=false;$('wind').hidden=false;$('cmp').hidden=false;$('tmBtn').hidden=false;$('pdial').hidden=false;$('bottom').hidden=false;$('inv').hidden=st.spec;$('touch').hidden=st.spec;
-  startTurn();if(st.spec)setTimeout(()=>{if(st.mode==='play')toast('Zuschauer-Modus');},1500);
+  startTurn();if(st.spec)setTimeout(()=>{if(st.mode==='play')toast(UI_T.toast.spectate);},1500);
 }
 
 /* ---------- Computergegner ---------- */
@@ -3156,7 +3156,7 @@ function simShot(w,yaw,pitch,power,wk){
 function optPv(){return st.optP&&st.optW===st.wp&&Math.abs(st.pitch-st.optPi)<.03&&aimLv()===2?st.optP:0;}
 function prePow(){const W=WEAPONS[st.wp],v=st.lp&&st.lp[st.team+W.id];return v>.03?v:.6;}
 function setPre(v){const W=WEAPONS[st.wp];(st.lp=st.lp||{})[st.team+W.id]=Math.max(.05,Math.min(1,v));}
-function nudgePre(d){const W=WEAPONS[st.wp];if(aimLv()<1||!(W.v1>W.v0)||st.charging)return;setPre(prePow()+d);toast('Kraft '+Math.round(prePow()*100)+'%');}
+function nudgePre(d){const W=WEAPONS[st.wp];if(aimLv()<1||!(W.v1>W.v0)||st.charging)return;setPre(prePow()+d);toast(UI_T.toast.power(Math.round(prePow()*100)));}
 function simArc(w,yaw,pitch,power,idx,wk){
   wk=wk===undefined?1:wk;
   const W=WEAPONS[idx],bz=W.id==='baz',dir=aimDir(yaw,pitch),pos=muzzleOf(w,dir),vel=dir.multiplyScalar(lerp(W.v0,W.v1,power)),h=1/50,g=bz?GBZ:G,wf=(bz?.5:.4)*wk;
@@ -3226,7 +3226,7 @@ function updateWheel(c){wheel.hidden=false;$('inv').classList.add('pw');const am
 function winfo(i){const W=WEAPONS[i];$('winfo').innerHTML='<b>'+W.name+'</b><small>'+DESC[i]+'</small>';}
 /* Waffenwechsel (R1/L1, Tab, Pfeiltasten): überspringt gesperrte Waffen und solche ohne Munition */
 function nextUsable(dir){const am=st.ammo&&st.ammo[st.team],n=WEAPONS.length;for(let k=1;k<=n;k++){const i=(st.wp+dir*k+n*n)%n,W=WEAPONS[i];if(lockedW(W))continue;if(am&&W.id in am&&am[W.id]<=0)continue;return i;}return st.wp;}
-function selectWeapon(i){if(i===undefined)return;if(WEAPONS[i]&&lockedW(WEAPONS[i])&&st.phase==='aim'&&!st.cpuTurn){toast(WEAPONS[i].name+' erst ab Runde '+LATE_R);return;}if(st.phase==='aim'&&!st.cpuTurn&&!st.charging){if(i!==st.wp){st.lw=st.wp;S_('wsw');}st.wp=i;wbox.classList.remove('open');}}
+function selectWeapon(i){if(i===undefined)return;if(WEAPONS[i]&&lockedW(WEAPONS[i])&&st.phase==='aim'&&!st.cpuTurn){toast(UI_T.toast.lateR(WEAPONS[i].name,LATE_R));return;}if(st.phase==='aim'&&!st.cpuTurn&&!st.charging){if(i!==st.wp){st.lw=st.wp;S_('wsw');}st.wp=i;wbox.classList.remove('open');}}
 function renderHud(){
   const box=$('teams');box.innerHTML='';
   box.classList.toggle('compact',st.nt>3);
@@ -3299,20 +3299,20 @@ window.addEventListener('keydown',e=>{
   if(e.code==='KeyP'||e.code==='Escape')setPause(!paused);
   if(e.code==='KeyT')st.reticle=!st.reticle;
   if(e.code==='KeyV'&&!st.charging){st.free=!st.free;if(st.free&&document.exitPointerLock)document.exitPointerLock();toast(st.free?'Freie Kamera: WASD fliegen, Maus ziehen = umsehen, R/F hoch/runter, Shift schnell, Mausrad vor/zurück, V = zurück':'Kamera folgt wieder');}
-  if(e.code==='KeyC'){st.rc=1;if(st.free){st.free=false;toast('Kamera folgt wieder');}}
+  if(e.code==='KeyC'){st.rc=1;if(st.free){st.free=false;toast(UI_T.toast.camBack);}}
   if(e.code==='Space'&&st.phase==='fire'&&!paused)detonateSheep();
   if((e.code==='Space'||e.code==='Enter')&&st.drill)st.drill=null;
   if(!paused&&!st.cpuTurn&&st.phase==='fire'&&(e.code==='Enter'||e.code==='ShiftLeft'||e.code==='ShiftRight'))jump(st.worm);
   if(st.free)return;
   if(paused||st.cpuTurn||st.phase!=='aim')return;
-  if(e.code==='Delete'&&st.charging&&st.phase==='aim'){st.charging=false;st.power=0;toast('Schuss abgebrochen');return;}
-  if(e.code==='Backspace'){toast('Backspace halten = Zug beenden');return;}
+  if(e.code==='Delete'&&st.charging&&st.phase==='aim'){st.charging=false;st.power=0;toast(UI_T.toast.cancel);return;}
+  if(e.code==='Backspace'){toast(UI_T.toast.endTurn);return;}
   if(e.code==='KeyF')snapAim();
   if(e.code==='PageUp'||e.code==='Period')nudgePre(.05);
   if(e.code==='PageDown'||e.code==='Comma')nudgePre(-.05);
   if(e.code==='KeyB')backflip(st.worm);
   if(e.code==='KeyR')selectWeapon(st.lw);
-  if(e.code==='KeyI'){setInvY(!st.invY);toast(st.invY?'Y invertiert':'Y normal');}
+  if(e.code==='KeyI'){setInvY(!st.invY);toast(UI_T.toast.invY(st.invY));}
   if(e.code==='Space'&&!e.repeat)startCharge();
   if(e.code==='Enter'||e.code==='ShiftLeft'||e.code==='ShiftRight')jump(st.worm);
   if(e.code==='Tab')selectWeapon(nextUsable(1));
@@ -3402,7 +3402,7 @@ $('view').after(comicEl);
 function setComic(v,silent){comicOn=!!v;OUTK.value=comicOn?2.4:1;OUTM.color.setHex(comicOn?0x0a0808:0x1a1210);comicEl.style.display=comicOn?'block':'none';$('view').style.filter=comicOn?'contrast(1.12) saturate(1.35)':'';
   document.querySelectorAll('.chips[data-k=comic] button').forEach(b=>b.classList.toggle('on',(b.dataset.v==='1')===comicOn));
   try{localStorage.setItem('bbcomic',comicOn?'1':'0');}catch(e){}
-  if(!silent){toast(comicOn?'Comic-Look an':'Comic-Look aus');S_(comicOn?'pop':'clk');}}
+  if(!silent){toast(UI_T.toast.comic(comicOn));S_(comicOn?'pop':'clk');}}
 document.querySelectorAll('.chips[data-k=comic] button').forEach(b=>b.addEventListener('click',()=>setComic(b.dataset.v==='1',true)));
 window.addEventListener('keydown',e=>{if(e.code==='KeyO'&&!e.ctrlKey&&!e.metaKey&&!e.altKey&&!/INPUT|SELECT|TEXTAREA/.test((document.activeElement||{}).tagName||'')){e.preventDefault();setComic(!comicOn);}});
 {let cv='0';try{cv=localStorage.getItem('bbcomic')||'0';}catch(e){}if(cv==='1')setComic(true,true);}
@@ -3769,7 +3769,7 @@ function frame(now){
       }
       const still=!st.drill&&projs.length===0&&holes.length===0&&mets.length===0&&!st.met&&!props.some(b=>b.fuse>0)&&worms.every(o=>!o.alive||o.onGround);
       st.wait=still?st.wait+dt:0;
-      if(st.wait>((st.kE||st.kS)?3.4:st.dmgTurn?2.0:1.4)){if(!st.mc){st.mc=1;if(!st.dmgTurn&&w.alive&&!['tel','min','bor'].includes(WEAPONS[st.wp].id))say(w,'miss','#ffb86b');}if(!st.retreated&&!st.cpuTurn&&w.alive&&!st.fused){st.retreated=true;st.noFire=true;st.phase='aim';st.t=5;st.wait=0;toast(st.dmgTurn?'Rückzug! Treffer: -'+st.dmgTurn:'Rückzug!');}else endTurn();}
+      if(st.wait>((st.kE||st.kS)?3.4:st.dmgTurn?2.0:1.4)){if(!st.mc){st.mc=1;if(!st.dmgTurn&&w.alive&&!['tel','min','bor'].includes(WEAPONS[st.wp].id))say(w,'miss','#ffb86b');}if(!st.retreated&&!st.cpuTurn&&w.alive&&!st.fused){st.retreated=true;st.noFire=true;st.phase='aim';st.t=5;st.wait=0;toast(UI_T.toast.retreat(st.dmgTurn));}else endTurn();}
     }
     if(st.mode==='play')updateHud();
   }
@@ -3854,6 +3854,45 @@ function frame(now){
 const UI_T={ok:'OK',back:'Zurück',rot:'Bitte das Handy quer halten',mute:'Ton an/aus',credTitle:'Credits',
  cred:['Musik &amp; Sounds: im Spiel erzeugt (Web Audio)','Logo-Schrift: Luckiest Guy – Astigmatic (Apache 2.0)','3D-Grafik: three.js (MIT)'],
  teamsClose:b=>'R3 / '+b+' zum Schließen',teamsCloseKey:'H zum Schließen',
+ s:{random:'Zufall',
+  ok:'OK',
+  settings:'Einstellungen',
+  help:'Anleitung',
+  toMenu:'Zurück zum Menü',
+  desert:'Wüste',
+  wormsPer:'Würmer pro Team',
+  wind:'Wind',
+  meadow:'Wiese',
+  resume:'Weiter',
+  weapon:'Waffe',
+  volcano:'Vulkan',
+  teams:'Teams',
+  jump:'Sprung',
+  start:'Spiel starten',
+  hard:'Schwer',
+  snow:'Schnee',
+  gorge:'Schlucht',
+  pause:'Pause',
+  normal:'Normal',
+  again:'Nochmal',
+  restart:'Neustart',
+  newMap:'Neue Karte',
+  menu:'Menü',
+  land:'Landschaft',
+  map:'Karte',
+  camera:'Kamera',
+  island:'Insel',
+  fire:'Feuer',
+  spires:'Felsnadeln',
+  easy:'Einfach',
+  credits:'Credits',
+  controller:'Controller',
+  cpuStr:'Computer-Stärke',
+  archi:'Archipel',
+  noPad:'keiner erkannt – Taste am Controller drücken',
+  rotate:'Bitte das Handy quer halten'},
+ toast:{fall:'Fallschaden! Zug vorbei',air:'Luftschlag!',noAmmo:'Keine Munition',noHit:'Kein Ziel getroffen',drill:'Bohrer l00e4uft! Leertaste = Stopp',sheep:'Nochmal Feuer = Schaf sprengen',run:'Lauf weg!',meteor:'Meteoritenregen! Achtung!',aimOff:'Zielhilfe ist aus (Einstellungen)',camBack:'Kamera folgt wieder',cancel:'Schuss abgebrochen',banana:'Bananen!',mine:'Mine gelegt',hole:'Schwarzes Loch!',implode:'Implosion!',noGrip:'Kein Halt',rope:'Seil! W ranziehen, S ablassen, A/D schwingen, Enter loslassen',spectate:'Zuschauer-Modus',endTurn:'Backspace halten = Zug beenden',mouseAim:'Maus-Zielen: halten = laden, loslassen = Feuer',lateR:(n,r)=>n+' erst ab Runde '+r,power:p=>'Kraft '+p+'%',invY:o=>o?'Y invertiert':'Y normal',comic:o=>o?'Comic-Look an':'Comic-Look aus',retreat:d=>d?'Rückzug! Treffer: -'+d:'Rückzug!',padOn:ps=>ps?'PS-Controller verbunden':'Controller verbunden',crate:hp=>hp?'Gesundheitskiste fällt!':'Waffenkiste fällt!',turn:n=>n+' ist dran',sdArm:l=>'Sudden Death + Armageddon: '+l+' steigt, Meteoriten fallen!',padMiss:n=>'Controller '+n+' fehlt – Tastatur geht'},
+
  helpBtn:'Anleitung',
  helpGoal:['Ziel','Die Teams spielen reihum. Wer zuletzt noch Figuren hat, gewinnt.'],
  helpMove:'Laufen',helpAim:'Zielen',helpFire:'Schießen',helpJump:'Springen',helpWeap:'Waffe & Kamera',
@@ -3905,6 +3944,7 @@ addEventListener('keydown',e=>{if(e.code==='KeyM'&&!e.repeat&&st.mode!=='play')m
 $('credList').innerHTML=UI_T.cred.map(t=>'<li>'+t+'</li>').join('');
 $('ver').addEventListener('click',()=>{$('credits').hidden=false;});$('credOk').addEventListener('click',()=>{$('credits').hidden=true;});
 function openHelp(){const hp=padList().length>0,tc=matchMedia('(pointer:coarse)').matches,T=hp?UI_T.helpPad():tc?UI_T.helpTouch:UI_T.helpKey,G=UI_T.helpGoal;$('helpT').textContent=UI_T.helpBtn;$('helpGrid').innerHTML='<div><b>'+G[0]+'</b>'+G[1]+'</div>'+[['helpMove','move'],['helpAim','aim'],['helpFire','fire'],['helpJump','jump'],['helpWeap','weap']].map(a=>'<div><b>'+UI_T[a[0]]+'</b>'+T[a[1]]+'</div>').join('');$('help').hidden=false;}
+document.querySelectorAll('[data-t]').forEach(e=>{const v=UI_T.s[e.dataset.t];if(v!=null)e.textContent=v;});
 $('bHelp').addEventListener('click',openHelp);$('helpOk').addEventListener('click',()=>{$('help').hidden=true;});
 /* Grafik Auto: startet hoch (Handy: mittel) und geht runter, wenn es ruckelt */
 let afN=0,afT=0,afLast=0,afWait=3;
