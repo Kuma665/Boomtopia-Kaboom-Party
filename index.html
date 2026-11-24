@@ -362,7 +362,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 </svg></h1>
       <div class="optgrid"><div class="opt"><span data-t="teams">Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span data-t="wormsPer">Würmer pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span data-t="map">Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="island">Insel</button><button data-v="1" data-t="archi">Archipel</button><button data-v="2" data-t="gorge">Schlucht</button><button data-v="3" data-t="spires">Felsnadeln</button></div></div><div class="opt"><span data-t="land">Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="meadow">Wiese</button><button data-v="1" data-t="snow">Schnee</button><button data-v="2" data-t="desert">Wüste</button><button data-v="3" data-t="volcano">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span data-t="cpuStr">Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0" data-t="easy">Einfach</button><button type="button" data-v="1" class="on" data-t="normal">Normal</button><button type="button" data-v="2" data-t="hard">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span data-t="controller">Controller</span><div id="padtxt" data-t="noPad">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p" data-t="start">Spiel starten</button><button id="bSet" class="alt" type="button" data-t="settings">Einstellungen</button><button id="bHelp" class="alt" type="button" data-t="help">Anleitung</button></div>
           </div>
-    <div id="ver">v2026-11-24b-r187</div>
+    <div id="ver">v2026-11-24c-r187</div>
   </div>
   <div id="help" class="overlay" hidden><div class="card"><h1 id="helpT" data-t="help">Anleitung</h1><div id="helpGrid"></div><div class="btns"><button id="helpOk" type="button" data-t="ok">OK</button></div></div></div>
   <div id="credits" class="overlay" hidden><div class="card"><h1 data-t="credits">Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button" data-t="ok">OK</button></div></div></div>
@@ -1385,11 +1385,7 @@ function buildCactus(team,g){
   spines(lo,0,.05,0,.5,.5,.48,16,.03);
   let ra=null;
   for(const sx of[-1,1]){
-    if(sx>0){ra=new THREE.Group();ra.position.set(.5,.1,0);ra.add(pm(new THREE.CylinderGeometry(.11,.12,.5,8),G,0,-.25,0,1,1,1,1.1));ra.add(pm(SPH,G,0,-.55,0,.14,.14,.14,1.1));for(const q of[-1,1])ra.add(pm(new THREE.ConeGeometry(.025,.12,4),SPN,q*.14,-.5,0).rotateZ(-q*Math.PI/2));lo.add(ra);continue;}
-    lo.add(pm(new THREE.CylinderGeometry(.1,.1,.26,8).rotateZ(Math.PI/2),G,sx*.47,-.08,0,1,1,1,1.1));
-    lo.add(pm(new THREE.CylinderGeometry(.11,.12,.5,8),G,sx*.6,.15,0,1,1,1,1.1));
-    lo.add(pm(SPH,G,sx*.6,.4,0,.12,.12,.12,1.1));
-    for(const y of[.1,.28])lo.add(pm(new THREE.ConeGeometry(.025,.12,4),SPN,sx*.72,y,0).rotateZ(-sx*Math.PI/2)||lo);
+    const A=new THREE.Group();A.position.set(sx*.5,.1,0);A.add(pm(new THREE.CylinderGeometry(.11,.12,.5,8),G,0,-.25,0,1,1,1,1.1));A.add(pm(SPH,G,0,-.55,0,.14,.14,.14,1.1));for(const q of[-1,1])A.add(pm(new THREE.ConeGeometry(.025,.12,4),SPN,q*.14,-.5,0).rotateZ(-q*Math.PI/2));lo.add(A);if(sx>0)ra=A; /* beide Arme haengen (Waffenarm rechts hebt sich nur mit Waffe) */
   }
   g.add(lo);
   const up=new THREE.Group();up.position.y=1.2;
