@@ -362,7 +362,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 </svg></h1>
       <div class="optgrid"><div class="opt"><span data-t="teams">Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span data-t="wormsPer">Würmer pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span data-t="map">Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="island">Insel</button><button data-v="1" data-t="archi">Archipel</button><button data-v="2" data-t="gorge">Schlucht</button><button data-v="3" data-t="spires">Felsnadeln</button></div></div><div class="opt"><span data-t="land">Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="meadow">Wiese</button><button data-v="1" data-t="snow">Schnee</button><button data-v="2" data-t="desert">Wüste</button><button data-v="3" data-t="volcano">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span data-t="cpuStr">Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0" data-t="easy">Einfach</button><button type="button" data-v="1" class="on" data-t="normal">Normal</button><button type="button" data-v="2" data-t="hard">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span data-t="controller">Controller</span><div id="padtxt" data-t="noPad">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p" data-t="start">Spiel starten</button><button id="bSet" class="alt" type="button" data-t="settings">Einstellungen</button><button id="bHelp" class="alt" type="button" data-t="help">Anleitung</button></div>
           </div>
-    <div id="ver">v2026-11-24d-r187</div>
+    <div id="ver">v2026-11-24e-r187</div>
   </div>
   <div id="help" class="overlay" hidden><div class="card"><h1 id="helpT" data-t="help">Anleitung</h1><div id="helpGrid"></div><div class="btns"><button id="helpOk" type="button" data-t="ok">OK</button></div></div></div>
   <div id="credits" class="overlay" hidden><div class="card"><h1 data-t="credits">Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button" data-t="ok">OK</button></div></div></div>
@@ -1107,8 +1107,13 @@ function updateParts(dt){
   pinst.instanceMatrix.needsUpdate=true;pinst.instanceColor.needsUpdate=true;pAlA.needsUpdate=true;
 }
 const fxs=[],flashGeo=new THREE.SphereGeometry(1,16,12);
+/* Effekt-Pools: Blitz, Ring, Halo, Feuer werden wiederverwendet statt pro Explosion neu angelegt */
+const flashPool=[],ringPool=[],sprPool=[],ringGeo=new THREE.RingGeometry(.85,1,40);
+function fxFlash(){const m=flashPool.pop()||new THREE.Mesh(flashGeo,new THREE.MeshBasicMaterial({transparent:true}));m.userData.pool=flashPool;m.visible=true;return m;}
+function fxRing(){let m=ringPool.pop();if(!m){m=new THREE.Mesh(ringGeo,new THREE.MeshBasicMaterial({color:0xfff0c0,transparent:true,side:THREE.DoubleSide,depthWrite:false}));m.rotation.x=-Math.PI/2;}m.userData.pool=ringPool;m.visible=true;return m;}
+function fxSpr(col){let s=sprPool.pop();if(!s){s=new THREE.Sprite(new THREE.SpriteMaterial({map:dotTex,blending:THREE.AdditiveBlending,transparent:true,depthWrite:false,fog:false}));}s.material.color.setHex(col);s.material.opacity=1;s.userData.pool=sprPool;s.visible=true;return s;}
 function addFlash(pos,r,col){
-  const m=new THREE.Mesh(flashGeo,new THREE.MeshBasicMaterial({color:col||0xffc060,transparent:true,opacity:.95}));
+  const m=fxFlash();m.material.color.setHex(col||0xffc060);m.material.opacity=.95;
   m.position.copy(pos);gameGroup.add(m);fxs.push({m,t:0,dur:0.35,r,kind:'flash'});
 }
 function addLine(a,b){
@@ -1117,7 +1122,7 @@ function addLine(a,b){
   gameGroup.add(m);fxs.push({m,t:0,dur:0.09,kind:'line'});
 }
 const boomL=PL(0xffa040,0,45);scene.add(boomL);
-function addRing(pos,r){const m=new THREE.Mesh(new THREE.RingGeometry(.85,1,40),new THREE.MeshBasicMaterial({color:0xfff0c0,transparent:true,opacity:.8,side:THREE.DoubleSide,depthWrite:false}));m.position.copy(pos);m.rotation.x=-Math.PI/2;gameGroup.add(m);fxs.push({m,t:0,dur:.5,r,kind:'ring'});}
+function addRing(pos,r){const m=fxRing();m.material.opacity=.8;m.position.copy(pos);gameGroup.add(m);fxs.push({m,t:0,dur:.5,r,kind:'ring'});}
 function updateFx(dt){boomL.intensity*=Math.pow(.02,dt);
   for(let i=fxs.length-1;i>=0;i--){
     const f=fxs[i];f.t+=dt;const k=f.t/f.dur;
@@ -1126,7 +1131,7 @@ function updateFx(dt){boomL.intensity*=Math.pow(.02,dt);
     if(f.kind==='fire'){const e=1-Math.pow(1-Math.min(1,k),3);f.m.scale.setScalar(f.r*(.45+e*1.5));f.m.position.y+=dt*f.up;f.m.material.color.setRGB(1,Math.max(.15,1-k*.85),Math.max(0,.45-k*.6));f.m.material.opacity=Math.max(0,.9*Math.pow(1-k,1.6));}
     if(f.kind==='halo'){f.m.scale.setScalar(f.r*(.6+k*.9));f.m.material.opacity=Math.max(0,.75*Math.pow(1-k,2));}
     if(f.kind==='ghost'){f.m.position.y+=dt*1.6;f.m.position.x+=Math.sin(f.t*5)*dt*.6;f.m.material.opacity=Math.max(0,.85*(1-k*k));}
-    if(k>=1){gameGroup.remove(f.m);if(f.kind==='line'||f.kind==='ring')f.m.geometry.dispose();if(f.kind==='ghost'||f.kind==='fire'||f.kind==='halo')f.m.material.dispose();fxs.splice(i,1);}
+    if(k>=1){gameGroup.remove(f.m);if(f.m.userData.pool){f.m.visible=false;f.m.userData.pool.push(f.m);}else{if(f.kind==='line')f.m.geometry.dispose();if(f.kind==='ghost')f.m.material.dispose();}fxs.splice(i,1);}
   }
 }
 function boom(pos,r){
@@ -1135,11 +1140,11 @@ function boom(pos,r){
   {const gy=Math.max(hAt(pos.x,pos.z),WATER)+.2,n=10+Math.round(r*3);
    for(let i=0;i<n;i++){const a=i/n*6.283+rnd()*.3,v=r*2.2+rnd()*2;sp(pos.x,gy,pos.z,Math.cos(a)*v,.4,Math.sin(a)*v,TH.dust,.35,.7+rnd()*.3,0,1.2,2.5);}
    if(r>=2)for(let i=0;i<8;i++)sp(pos.x+(rnd()-.5)*r*.4,pos.y+.5,pos.z+(rnd()-.5)*r*.4,(rnd()-.5)*.8,3+rnd()*3,(rnd()-.5)*.8,0x4a4a4a,.9,1.8+rnd(),-.5,1.6,.8);}
-  if(st.gfx!==3){const h=new THREE.Sprite(new THREE.SpriteMaterial({map:dotTex,color:0xffb050,blending:THREE.AdditiveBlending,transparent:true,depthWrite:false,fog:false}));h.position.copy(pos);h.renderOrder=7;gameGroup.add(h);fxs.push({m:h,t:0,dur:.5,r:r*4.5,kind:'halo'});}
+  if(st.gfx!==3){const h=fxSpr(0xffb050);h.position.copy(pos);h.renderOrder=7;gameGroup.add(h);fxs.push({m:h,t:0,dur:.5,r:r*4.5,kind:'halo'});}
   for(let i=0,n=Math.min(24,8+Math.round(r*3));i<n;i++){const a=rnd()*6.283,v=3.5+rnd()*(6.5+r*1.3);spawnChunk(new V3(pos.x,pos.y+.3,pos.z),new V3(Math.cos(a)*v,4+rnd()*8,Math.sin(a)*v));}
   /* Feuerball: mehrere weiche, additive Glutwolken, die aufquellen, aufsteigen und von Gelb nach Dunkelorange ausbrennen */
   for(let i=0;i<5+Math.round(r);i++){
-    const s=new THREE.Sprite(new THREE.SpriteMaterial({map:dotTex,color:0xffd060,blending:THREE.AdditiveBlending,transparent:true,depthWrite:false,fog:false}));
+    const s=fxSpr(0xffd060);
     s.position.set(pos.x+(rnd()-.5)*r*.7,pos.y+(rnd()-.2)*r*.5,pos.z+(rnd()-.5)*r*.7);s.renderOrder=8;gameGroup.add(s);
     fxs.push({m:s,t:0,dur:.55+rnd()*.5,r:r*(1.4+rnd()*.9),up:1.5+rnd()*2.5,kind:'fire'});
   }
