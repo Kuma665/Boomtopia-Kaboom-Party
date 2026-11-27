@@ -369,7 +369,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 </svg></h1>
       <div class="optgrid"><div class="opt"><span data-t="teams">Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span data-t="wormsPer">Figuren pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span data-t="map">Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="island">Insel</button><button data-v="1" data-t="archi">Archipel</button><button data-v="2" data-t="gorge">Schlucht</button><button data-v="3" data-t="spires">Felsnadeln</button></div></div><div class="opt"><span data-t="land">Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="meadow">Wiese</button><button data-v="1" data-t="snow">Schnee</button><button data-v="2" data-t="desert">Wüste</button><button data-v="3" data-t="volcano">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span data-t="cpuStr">Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0" data-t="easy">Einfach</button><button type="button" data-v="1" class="on" data-t="normal">Normal</button><button type="button" data-v="2" data-t="hard">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span data-t="controller">Controller</span><div id="padtxt" data-t="noPad">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p" data-t="start">Spiel starten</button><button id="bSet" class="alt" type="button" data-t="settings">Einstellungen</button><button id="bHelp" class="alt" type="button" data-t="help">Anleitung</button></div>
           </div>
-    <div id="ver">v2026-11-27h-r187</div>
+    <div id="ver">v2026-11-27i-r187</div>
   </div>
   <div id="help" class="overlay" hidden><div class="card"><h1 id="helpT" data-t="help">Anleitung</h1><div id="helpGrid"></div><div class="btns"><button id="helpOk" type="button" data-t="ok">OK</button></div></div></div>
   <div id="credits" class="overlay" hidden><div class="card"><h1 data-t="credits">Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button" data-t="ok">OK</button></div></div></div>
@@ -3203,13 +3203,24 @@ function fireworks(){const ws=worms.filter(w=>w.alive&&w.team===st.winTeam);if(!
   for(let i=0;i<14;i++)setTimeout(()=>{if(st.mode!=='over')return;const w=ws[i%ws.length],x=w.pos.x+(rnd()-.5)*10,z=w.pos.z+(rnd()-.5)*10,y=w.pos.y+9+rnd()*8;S_('pop');
     setTimeout(()=>{if(st.mode!=='over')return;const c=[0xff4a4a,0xffd23a,0x5ad1ff,0x7dff6a,0xff7af0][(rnd()*5)|0],c2=[0xffffff,0xffd23a][(rnd()*2)|0];
       for(let k=0;k<26;k++){const a=rnd()*6.28,b=Math.acos(2*rnd()-1),v=5+rnd()*3;sp(x,y,z,Math.sin(b)*Math.cos(a)*v,Math.cos(b)*v,Math.sin(b)*Math.sin(a)*v,k%3?c:c2,.3,1.5,5,0,1.2);}},260);},i*550+300);}
+/* Konfetti-Regen über dem Gewinner (aus dem Partikel-Pool, Menge je Grafikstufe) */
+const MENU_LOOK=new V3(0,4,0);
+function updConfetti(w,dt){
+  if(paused)return;st.cfA=(st.cfA||0)+dt*(st.gfx===3?18:st.gfx===2?32:50);
+  while(st.cfA>=1){st.cfA--;const a=rnd()*6.283,r=rnd()*7;sp(w.pos.x+Math.cos(a)*r,w.pos.y+9+rnd()*4,w.pos.z+Math.sin(a)*r,(rnd()-.5)*1.5,-1-rnd(),(rnd()-.5)*1.5,CANDY[(rnd()*CANDY.length)|0],.15+rnd()*.1,3.2,1.2,0,.6);}
+}
+let endShowT=0;
+function showEnd(){clearTimeout(endShowT);endShowT=0;if(st.mode==='over')$('end').hidden=false;}
+/* Eingabe, die die Karte vorzieht, wird geschluckt (sonst löst derselbe Tipp/Enter gleich einen Knopf darauf aus) */
+['pointerdown','keydown'].forEach(ev=>window.addEventListener(ev,e=>{if(!endShowT||st.mode!=='over')return;e.stopPropagation();e.preventDefault();showEnd();const en=$('end');en.style.pointerEvents='none';setTimeout(()=>{en.style.pointerEvents='';},400);},true));
 function endGame(win){
-  st.mode='over';st.winTeam=win<0?null:TEAMS[win];cmt(win>=0?'win':'draw');S_(win>=0?'win':'draw');if(win>=0){fireworks();S_('cheer');setTimeout(()=>{if(st.mode==='over')S_('troete');},1100);aliveOf(win).forEach((w,i)=>setTimeout(()=>{if(st.mode==='over'){w.sayT=-9;say(w,'win','#ffd24a');}},900+i*500));}
+  st.mode='over';st.overT=0;st.cfA=0;st.winTeam=win<0?null:TEAMS[win];cmt(win>=0?'win':'draw');S_(win>=0?'win':'draw');if(win>=0){fireworks();S_('cheer');setTimeout(()=>{if(st.mode==='over')S_('troete');},1100);aliveOf(win).forEach((w,i)=>setTimeout(()=>{if(st.mode==='over'){w.sayT=-9;say(w,'win','#ffd24a');}},900+i*500));}
   $('tbar').hidden=true;$('turn').hidden=true;$('wind').hidden=true;$('cmp').hidden=true;$('tmBtn').hidden=true;$('pdial').hidden=true;$('teams').classList.remove('open');$('bottom').hidden=true;$('inv').hidden=true;$('touch').hidden=true;
   $('endTitle').textContent=win<0?'Unentschieden':TEAMS[win].label+' gewinnt!';
   $('endTitle').style.color=win<0?'':TEAMS[win].color;
   $('endSub').textContent=win<0?UI_T.endNone:UI_T.endLeft(aliveOf(win).length,st.n);
-  $('end').hidden=false;
+  /* Ende-Karte erst nach dem Sieger-Moment (Tippen/Taste zeigt sie sofort); ohne Gewinner gleich */
+  clearTimeout(endShowT);if(win>=0&&aliveOf(win).length)endShowT=setTimeout(showEnd,2600);else showEnd();
   if(st.spec)setTimeout(()=>{if(st.mode==='over')startGame();},7000);
 }
 function startGame(same){
@@ -3661,7 +3672,10 @@ function updateCam(dt,time){
       look.x=clamp(look.x,-HALF-15,HALF+15);look.z=clamp(look.z,-HALF-15,HALF+15);look.y=clamp(look.y,-2,70);
     }else look.lerp(d,1-Math.exp(-(projs.length?16:6)*dt));
   }else{
-    camYaw+=dt*0.08;yaw=camYaw;const ww=st.mode==='over'&&worms.find(o=>o.alive&&o.team===st.winTeam);look.lerp(ww?ww.pos:new V3(0,4,0),1-Math.exp(-3*dt));po=ww?.3:.38;dist=ww?12:110;
+    /* Sieger-Kamerafahrt: von weit/oben schnell kreisend heran (st.overT = Zeit seit Spielende), dann ruhig um den Gewinner */
+    const ww=st.mode==='over'&&worms.find(o=>o.alive&&o.team===st.winTeam);
+    if(ww){st.overT=(st.overT||0)+dt;const e=Math.exp(-st.overT*1.1);camYaw+=dt*(.1+.75*e);po=.24+.4*e;dist=9+24*e;}else{camYaw+=dt*0.08;po=.38;dist=110;}
+    yaw=camYaw;look.lerp(ww?ww.pos:MENU_LOOK,1-Math.exp(-3*dt));if(ww)updConfetti(ww,dt);
   }
   const mk=(p,d,yy)=>{const c=Math.cos(p),Y=yy===undefined?yaw:yy;return new V3(look.x+Math.sin(Y)*c*d,look.y+Math.sin(p)*d,look.z+Math.cos(Y)*c*d);};
   const blocked=q=>{for(let t=.12;t<=1;t+=.06){const x=look.x+(q.x-look.x)*t,y=look.y+(q.y-look.y)*t,z=look.z+(q.z-look.z)*t;if(hAt(x,z)+.7>y)return true;}return false;};
@@ -3791,7 +3805,7 @@ function syncWorms(time){
     if(!w.alive)continue;
     const cur=w===st.worm&&st.mode==='play';
     lockBf();if(cur&&(st.phase==='aim'||st.phase==='fire'))w.yaw=st.ay;
-    w.g.position.copy(w.pos);w.g.rotation.y=w.yaw;{const k=clamp(1-(time-(w.fl||-9))/.4,0,1);w.g.scale.set(1+k*.2,1-k*.25,1+k*.2);const bl=Math.sin(time*.9+w.pos.x*3)>.985?.1:1;for(const c of w.blink)c.scale.y=c.scale.x*bl;}{const lab=w.g.children[w.g.children.length-1];lab.material.opacity=cur&&st.phase==='aim'?0:clamp((camera.position.distanceTo(w.g.position)-6)/10,.25,1);}animExtra(w,cur,time,dt);eyeLook(w,cur,dt);
+    w.g.position.copy(w.pos);w.g.rotation.y=w.yaw;{const k=clamp(1-(time-(w.fl||-9))/.4,0,1);w.g.scale.set(1+k*.2,1-k*.25,1+k*.2);const bl=Math.sin(time*.9+w.pos.x*3)>.985?.1:1;for(const c of w.blink)c.scale.y=c.scale.x*bl;}{const lab=w.g.children[w.g.children.length-1];lab.material.opacity=cur&&st.phase==='aim'||st.mode==='over'?0:clamp((camera.position.distanceTo(w.g.position)-6)/10,.25,1);}animExtra(w,cur,time,dt);eyeLook(w,cur,dt);
     /* Lauf-Stil pro Figur: h=Höhe, f=Tempo, hop=Hüpfen (Strecken/Stauchen), rz=Watscheln, lean=Vorneigen, uz=Kopfnicken, step=roboterhaft abgehackt */
     const WK=WALKS[w.team.species]||WALKS.worm,ph=w.walkT*WK.f,sn=Math.sin(ph);
     let bob;
@@ -4099,7 +4113,7 @@ requestAnimationFrame(autoGfx);
 let pmPrev8=false;
 function baseTick(){
  if(muted!==lastMuted){lastMuted=muted;$('muteBtn').textContent=muted?'🔇':'🔊';try{localStorage.setItem('bbmute',muted?'1':'0');}catch(e){}}
- const inGame=st.mode==='play'&&!paused,hasPad=padList().length>0;
+ const inGame=st.mode==='play'&&!paused||st.mode==='over'&&$('end').hidden,hasPad=padList().length>0;
  $('muteBtn').hidden=inGame||!!$('title');$('fsBtn').hidden=$('muteBtn').hidden||!(document.documentElement.requestFullscreen||document.documentElement.webkitRequestFullscreen);
  const ov=['help','credits','settings','pause','end','menu'].map($).find(o=>o&&!o.hidden);
  let show=hasPad&&!$('title')&&ov&&ov.id!=='settings';
