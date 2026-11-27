@@ -363,7 +363,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 </svg></h1>
       <div class="optgrid"><div class="opt"><span data-t="teams">Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span data-t="wormsPer">Figuren pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span data-t="map">Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="island">Insel</button><button data-v="1" data-t="archi">Archipel</button><button data-v="2" data-t="gorge">Schlucht</button><button data-v="3" data-t="spires">Felsnadeln</button></div></div><div class="opt"><span data-t="land">Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="meadow">Wiese</button><button data-v="1" data-t="snow">Schnee</button><button data-v="2" data-t="desert">Wüste</button><button data-v="3" data-t="volcano">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span data-t="cpuStr">Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0" data-t="easy">Einfach</button><button type="button" data-v="1" class="on" data-t="normal">Normal</button><button type="button" data-v="2" data-t="hard">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span data-t="controller">Controller</span><div id="padtxt" data-t="noPad">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p" data-t="start">Spiel starten</button><button id="bSet" class="alt" type="button" data-t="settings">Einstellungen</button><button id="bHelp" class="alt" type="button" data-t="help">Anleitung</button></div>
           </div>
-    <div id="ver">v2026-11-27c-r187</div>
+    <div id="ver">v2026-11-27d-r187</div>
   </div>
   <div id="help" class="overlay" hidden><div class="card"><h1 id="helpT" data-t="help">Anleitung</h1><div id="helpGrid"></div><div class="btns"><button id="helpOk" type="button" data-t="ok">OK</button></div></div></div>
   <div id="credits" class="overlay" hidden><div class="card"><h1 data-t="credits">Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button" data-t="ok">OK</button></div></div></div>
@@ -1144,7 +1144,9 @@ function boom(pos,r){
   {const gy=Math.max(hAt(pos.x,pos.z),WATER)+.2,n=10+Math.round(r*3);
    for(let i=0;i<n;i++){const a=i/n*6.283+rnd()*.3,v=r*2.2+rnd()*2;sp(pos.x,gy,pos.z,Math.cos(a)*v,.4,Math.sin(a)*v,TH.dust,.35,.7+rnd()*.3,0,1.2,2.5);}
    if(r>=2)for(let i=0;i<8;i++)sp(pos.x+(rnd()-.5)*r*.4,pos.y+.5,pos.z+(rnd()-.5)*r*.4,(rnd()-.5)*.8,3+rnd()*3,(rnd()-.5)*.8,0x4a4a4a,.9,1.8+rnd(),-.5,1.6,.8);}
-  if(st.gfx!==3){const h=fxSpr(0xffb050);h.position.copy(pos);h.renderOrder=7;gameGroup.add(h);fxs.push({m:h,t:0,dur:.5,r:r*4.5,kind:'halo'});}
+  if(st.gfx!==3){const h=fxSpr(0xffb050);h.position.copy(pos);h.renderOrder=7;gameGroup.add(h);fxs.push({m:h,t:0,dur:.5+r*.03,r:r*4.5,kind:'halo'});
+    /* Glühkern: weiß-gelb, sehr kurz, additiv (eigener Glüh-Effekt statt Composer-Bloom) */
+    const k=fxSpr(0xfff2c8);k.position.copy(pos);k.renderOrder=9;gameGroup.add(k);fxs.push({m:k,t:0,dur:.2,r:r*2.4,kind:'halo'});}
   for(let i=0,n=Math.min(24,8+Math.round(r*3));i<n;i++){const a=rnd()*6.283,v=3.5+rnd()*(6.5+r*1.3);spawnChunk(new V3(pos.x,pos.y+.3,pos.z),new V3(Math.cos(a)*v,4+rnd()*8,Math.sin(a)*v));}
   /* Feuerball: mehrere weiche, additive Glutwolken, die aufquellen, aufsteigen und von Gelb nach Dunkelorange ausbrennen */
   for(let i=0;i<5+Math.round(r);i++){
@@ -1754,12 +1756,14 @@ function explode(pos,W){
   S3('boom',pos,70);if(W.r>=2){setTimeout(()=>S3('debris',pos.clone(),45),300);}if(W.r>=2.5)st.duck=.7;if(W&&W.id==='hol')S_('holy');boom(pos,W.r);carve(pos.x,pos.y,pos.z,W.r);blast(pos,W.r);
   wavAmp=Math.min(.5,wavAmp+W.r*.04);if(pos.y<WATER+10&&hAt(pos.x,pos.z)<WATER+4)addRing(new V3(pos.x,WATER+.06,pos.z),W.r*2.6); /* Explosion in Wassernähe: Wellen */
   shake=Math.max(shake,.3+W.r*.1);st.kick=Math.max(st.kick||0,Math.min(1.8,.5+W.r*.22));st.shd=camera.position.clone().sub(pos).normalize();rumble(260,Math.min(1,.4+W.r*.1));st.hit.copy(pos);st.hitT=2.4;st.zm=W.r>=2.5;if(st.zm)shake=Math.max(shake,.55+W.r*.1);
-  const R=W.r+1.4;let hits=0;
+  const R=W.r+1.4;let hits=0,bigD=0;
   for(const w of worms){
     if(!w.alive)continue;
     const c=w.pos.clone().add(new V3(0,.8,0)),d=c.distanceTo(pos);
-    if(d<R){const f=1-d/R;hurt(w,Math.max(1,Math.round(W.dmg*f)),c.sub(pos).normalize(),f);hits++;}
+    if(d<R){const f=1-d/R,dm=Math.max(1,Math.round(W.dmg*f));hurt(w,dm,c.sub(pos).normalize(),f);hits++;if(dm>bigD)bigD=dm;}
   }
+  /* Zeitlupe bei großen Treffern (auch Granate, Dynamit usw., nicht nur Rakete): kurz, damit der Flug sichtbar wird */
+  if(bigD>=35)st.slo=Math.max(st.slo||0,bigD>=60?.7:.45);
   if(hits>=2){cbN=hits;S_('combo');cmt('multi');}
   if(hits>=2)floatText(['Doppel-Treffer!','Dreifach-Treffer!','MEGA-Treffer!'][Math.min(hits-2,2)],pos.clone().add(new V3(0,3.2,0)),'#ffd24a');
   if(W.r>=1.4){smokers.push({x:pos.x,y:hAt(pos.x,pos.z)+.2,z:pos.z,t:3.5+W.r*.4});if(smokers.length>10)smokers.shift();}
@@ -3524,7 +3528,7 @@ Object.assign(sfx,{hmk(){const t=AC.currentTime;voice(t,2200,2200,.035,'square',
 const CHN=120,chunks=[],chG=new THREE.IcosahedronGeometry(1,0);let chI=0;
 for(let i=0;i<CHN;i++){const m=new THREE.Mesh(chG,tm(0x6b4a2b));m.visible=false;m.castShadow=true;scene.add(m);chunks.push({m,on:false,v:new V3(),rs:new V3(),life:0,rest:false,s:.2,bx:1,by:1,bz:1});}
 function chHex(c){return((c[0]*255|0)<<16)|((c[1]*255|0)<<8)|(c[2]*255|0);}
-function spawnChunk(pos,vel){const c=chunks[chI=(chI+1)%CHN],q=rnd();c.on=true;c.m.visible=true;c.rest=false;c.life=7+rnd()*5;
+function spawnChunk(pos,vel){const c=chunks[chI=(chI+1)%CHN],q=rnd();c.on=true;c.m.visible=true;c.rest=false;c.life=c.l0=7+rnd()*5;c.tr=0;
   c.s=q<.12?.3+rnd()*.18:.1+rnd()*.15; /* wenige große Brocken, viele kleine */
   c.bx=c.s*(.8+rnd()*.7);c.by=c.s*(.55+rnd()*.6);c.bz=c.s*(.8+rnd()*.7);c.m.scale.set(c.bx,c.by,c.bz);
   /* Grasbrocken, Erde oder Fels, je nach Landschaft */
@@ -3534,6 +3538,8 @@ function clearChunks(){for(const c of chunks){c.on=false;c.m.visible=false;}}
 function updateChunks(dt){TUFU.value=clock;WFOAM.setRGB(TH.foam[0],TH.foam[1],TH.foam[2]);WREF.value=[.7,.5,0,.1][THEME];WLAVA.value=THEME===3?1:0;BLK*=Math.exp(-3.2*dt);FLK*=Math.exp(-6*dt);if(window.__bloom)window.__bloom.strength=[.5,.35,.12,.5][THEME]+BLK;flashEl.style.opacity=FLK<.01?0:FLK;for(const c of chunks){if(!c.on)continue;c.life-=dt;if(c.life<=0){c.on=false;c.m.visible=false;continue;}
   const p=c.m.position,gh=hAt(p.x,p.z);
   if(!c.rest){c.v.y-=G*dt;p.addScaledVector(c.v,dt);c.m.rotation.x+=c.rs.x*dt;c.m.rotation.y+=c.rs.y*dt;c.m.rotation.z+=c.rs.z*dt;
+    /* Rauchspur hinter großen Brocken (nur Grafik Mittel/Hoch): kurze graue Wölkchen, solange sie schnell fliegen */
+    if(c.s>.22&&st.gfx!==3&&c.v.lengthSq()>16){c.tr=(c.tr||0)-dt;if(c.tr<=0){c.tr=.05;sp(p.x,p.y,p.z,0,.4,0,c.life>c.l0-.35?0xffa040:0x6a6662,.18+c.s*.5,.55+rnd()*.25,-.4,.9,.5);}}
     if(p.y<WATER&&gh<WATER){c.on=false;c.m.visible=false;continue;}
     if(p.y<gh+c.s*.4){p.y=gh+c.s*.4;if(Math.abs(c.v.y)>2.5){c.v.y*=-.35;c.v.x*=.6;c.v.z*=.6;}else c.rest=true;}}
   else{p.y=gh+c.s*.4;if(gh<WATER-.2){c.on=false;c.m.visible=false;continue;}}
