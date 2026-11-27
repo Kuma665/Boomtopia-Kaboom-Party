@@ -363,7 +363,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 </svg></h1>
       <div class="optgrid"><div class="opt"><span data-t="teams">Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span data-t="wormsPer">Figuren pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span data-t="map">Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="island">Insel</button><button data-v="1" data-t="archi">Archipel</button><button data-v="2" data-t="gorge">Schlucht</button><button data-v="3" data-t="spires">Felsnadeln</button></div></div><div class="opt"><span data-t="land">Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="meadow">Wiese</button><button data-v="1" data-t="snow">Schnee</button><button data-v="2" data-t="desert">Wüste</button><button data-v="3" data-t="volcano">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span data-t="cpuStr">Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0" data-t="easy">Einfach</button><button type="button" data-v="1" class="on" data-t="normal">Normal</button><button type="button" data-v="2" data-t="hard">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span data-t="controller">Controller</span><div id="padtxt" data-t="noPad">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p" data-t="start">Spiel starten</button><button id="bSet" class="alt" type="button" data-t="settings">Einstellungen</button><button id="bHelp" class="alt" type="button" data-t="help">Anleitung</button></div>
           </div>
-    <div id="ver">v2026-11-27-r187</div>
+    <div id="ver">v2026-11-27b-r187</div>
   </div>
   <div id="help" class="overlay" hidden><div class="card"><h1 id="helpT" data-t="help">Anleitung</h1><div id="helpGrid"></div><div class="btns"><button id="helpOk" type="button" data-t="ok">OK</button></div></div></div>
   <div id="credits" class="overlay" hidden><div class="card"><h1 data-t="credits">Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button" data-t="ok">OK</button></div></div></div>
@@ -441,7 +441,9 @@ scene.fog=new THREE.Fog(0xcfe4f0,110,320);
 try{THREE.ShaderChunk.fog_fragment=THREE.ShaderChunk.fog_fragment.replace(/float fogFactor = smoothstep\(\s*fogNear,\s*fogFar,\s*vFogDepth\s*\);/,'float fogT=clamp((vFogDepth-fogNear)/(fogFar-fogNear),0.0,1.0);float fogFactor=(1.0-exp(-3.2*fogT*fogT))/(1.0-exp(-3.2));');}catch(e){}
 const camera=new THREE.PerspectiveCamera(58,1,0.5,700);
 const hemi=new THREE.HemisphereLight(0xcfe8ff,0x7a6a48,0.8);scene.add(hemi);
-const sun=new THREE.DirectionalLight(0xffe6bd,1.1);sun.position.set(60,90,30);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);{const c=sun.shadow.camera;c.left=c.bottom=-100;c.right=c.top=100;c.near=20;c.far=300;}sun.shadow.bias=-.0006;sun.shadow.normalBias=.6;scene.add(sun);
+const sun=new THREE.DirectionalLight(0xffe6bd,1.1);sun.position.set(60,90,30);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);{const c=sun.shadow.camera;c.left=c.bottom=-100;c.right=c.top=100;c.near=20;c.far=300;}sun.shadow.bias=-.0006;sun.shadow.normalBias=.6;scene.add(sun);scene.add(sun.target);
+/* Schatten folgen dem Blickpunkt (sunFollow): Richtung SUND aus setMood, Größe SUNS je nach Kameraabstand */
+const SUND=new THREE.Vector3(60,90,30).normalize(),SUNR=new THREE.Vector3(),SUNU=new THREE.Vector3();let SUNS=0;
 
 // Himmel mit Farbverlauf
 (function(){
@@ -485,7 +487,7 @@ function setMood(m){const M=Array.isArray(m)?m:MOODS[m];
     vv.set(p.getX(i),p.getY(i),p.getZ(i)).normalize();const ca=Math.max(0,vv.dot(sd)),gl=Math.pow(ca,6)*.22+Math.pow(ca,40)*.4; /* Glühen um die Sonne */
     c.setXYZ(i,t.r+sc.r*gl,t.g+sc.g*gl,t.b+sc.b*gl);}c.needsUpdate=true;
   try{window.__mood=typeof m==='number'?m:window.__mood;applyGrade(window.__mood||0);}catch(e){}
-  scene.fog.color.setHex(M[3]);sun.color.setHex(M[4]);sun.intensity=M[5];hemi.color.setHex(M[6]);hemi.groundColor.setHex(M[7]);hemi.intensity=M[8];sun.position.set(M[9],M[10],M[11]);
+  scene.fog.color.setHex(M[3]);sun.color.setHex(M[4]);sun.intensity=M[5];hemi.color.setHex(M[6]);hemi.groundColor.setHex(M[7]);hemi.intensity=M[8];sun.position.set(M[9],M[10],M[11]);SUND.set(M[9],M[10],M[11]).normalize();
   const gl=scene.userData.glow;gl.position.copy(sun.position).normalize().multiplyScalar(420);gl.material.color.setHex(M[4]);}
 // Wolken
 const clouds=[];
@@ -3458,6 +3460,7 @@ document.querySelectorAll('input.sens').forEach(el=>{const k=el.dataset.k,lab=$(
   ch.querySelectorAll('button').forEach(b=>{b.classList.toggle('on',b.dataset.v===v);b.addEventListener('click',()=>{try{localStorage.setItem(sk,b.dataset.v);}catch(e){}});});});
 let GFXA=false,GFXL=matchMedia('(pointer:coarse)').matches?2:1;
 function applyGfx(v){const pr=window.devicePixelRatio||1;GFXA=String(v)==='0';const lv=GFXA?GFXL:(+v||1);st.gfx=lv;renderer.setPixelRatio(lv===3?1:lv===2?Math.min(pr,1.5):Math.min(pr,2));
+  sun.shadow.radius=lv===1?3:lv===2?1.6:1; /* weiche Schattenkanten: Hoch weich, Mittel leicht, Niedrig hart */
   const sz=lv===3?512:lv===2?1024:2048;if(sun.shadow.mapSize.x!==sz){sun.shadow.mapSize.set(sz,sz);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null;}}resize();}
 document.querySelectorAll('.chips[data-k=gfx] button').forEach(b=>b.addEventListener('click',()=>applyGfx(b.dataset.v)));
 {const g=document.querySelector('.chips[data-k=gfx] .on');applyGfx(g?g.dataset.v:1);}
@@ -3759,6 +3762,18 @@ function syncWorms(time){
 /* ---------- Hauptschleife ---------- */
 const gulls=[];(function(){const m=new THREE.MeshBasicMaterial({color:0xffffff,side:THREE.DoubleSide});for(let i=0;i<5;i++){const g=new THREE.Group(),w=new THREE.BufferGeometry();w.setAttribute('position',new THREE.Float32BufferAttribute([0,0,0,-2.2,0,.5,0,0,-.9],3));const l=new THREE.Mesh(w,m),r=new THREE.Mesh(w,m);r.scale.x=-1;g.add(l,r);g.userData={a:rnd()*6.28,s:.12+rnd()*.1,rad:35+rnd()*35,y:22+rnd()*14,l,r};scene.add(g);gulls.push(g);}})();
 let last=performance.now(),clock=0;
+/* Schattenkamera um den Blickpunkt: nah = kleiner Ausschnitt = schärfere Schatten (Stufen, damit nichts pumpt);
+   Mittelpunkt im Licht-Raum auf ganze Schatten-Texel gerastert, sonst flimmern die Kanten beim Kameraschwenk */
+function sunFollow(){
+  const d=camera.position.distanceTo(look),S=d<32?40:d<70?62:100,c=sun.shadow.camera;
+  if(S!==SUNS){SUNS=S;c.left=c.bottom=-S;c.right=c.top=S;c.updateProjectionMatrix();}
+  SUNR.set(0,1,0).cross(SUND).normalize();SUNU.copy(SUND).cross(SUNR);
+  /* Ausschnitt halb in Blickrichtung schieben: hinter der Kamera braucht es kaum Schatten */
+  let fx=look.x-camera.position.x,fz=look.z-camera.position.z;const fl=Math.hypot(fx,fz)||1;fx=fx/fl*S*.45;fz=fz/fl*S*.45;
+  const cx=look.x+fx,cy=look.y,cz=look.z+fz,tx=2*S/sun.shadow.mapSize.x,lx=cx*SUNR.x+cy*SUNR.y+cz*SUNR.z,ly=cx*SUNU.x+cy*SUNU.y+cz*SUNU.z;
+  sun.target.position.set(cx,cy,cz).addScaledVector(SUNR,Math.round(lx/tx)*tx-lx).addScaledVector(SUNU,Math.round(ly/tx)*tx-ly);
+  sun.position.copy(sun.target.position).addScaledVector(SUND,150);
+}
 function frame(now){
   requestAnimationFrame(frame);
   const rdt=Math.min(0.05,(now-last)/1000);last=now;const dt=paused?0:rdt*tScale(rdt);clock+=dt;pollPad(rdt);updateComfort(rdt);
@@ -3820,7 +3835,7 @@ function frame(now){
   updateFX(dt);lightningTick(dt);updateSock();updateFoot(dt);updateRainbow(dt);updateGlow(clock);updateCrabs(dt);
   for(const o of props){const u=o.m.userData;if(u.spin)u.spin.rotation.z+=dt*.9;if(u.flame){const f=1+Math.sin(clock*18+o.pos.x)*.14+Math.sin(clock*31+o.pos.z)*.09;u.flame.scale.set(1+(f-1)*.4,f,1+(f-1)*.4);if(u.lt)u.lt.intensity=.7*f;}if(o.kind==='boat'){o.m.position.y=WATER+Math.sin(clock*1.4+o.pos.x)*.08;o.m.rotation.z=Math.sin(clock*1.1+o.pos.z)*.06;}}
   for(const g of gulls){const u=g.userData;u.a+=u.s*dt;g.position.set(Math.cos(u.a)*u.rad,u.y+Math.sin(u.a*3)*1.5,Math.sin(u.a)*u.rad);g.rotation.y=Math.PI-u.a;const f=Math.sin(clock*7+u.rad)*.5;u.l.rotation.z=f;u.r.rotation.z=-f;}
-  updateCam(dt,clock);
+  updateCam(dt,clock);sunFollow();
   {const c=window.__cmp;if(c&&st.gfx===1){try{c.render(rdt);}catch(e){window.__cmp=null;renderer.render(scene,camera);}}else renderer.render(scene,camera);}
 }
 /* ---------- Team-Vorschau im Menü ---------- */
