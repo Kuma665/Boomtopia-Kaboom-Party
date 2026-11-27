@@ -369,7 +369,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 </svg></h1>
       <div class="optgrid"><div class="opt"><span data-t="teams">Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span data-t="wormsPer">Figuren pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span data-t="map">Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="island">Insel</button><button data-v="1" data-t="archi">Archipel</button><button data-v="2" data-t="gorge">Schlucht</button><button data-v="3" data-t="spires">Felsnadeln</button></div></div><div class="opt"><span data-t="land">Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="meadow">Wiese</button><button data-v="1" data-t="snow">Schnee</button><button data-v="2" data-t="desert">Wüste</button><button data-v="3" data-t="volcano">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span data-t="cpuStr">Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0" data-t="easy">Einfach</button><button type="button" data-v="1" class="on" data-t="normal">Normal</button><button type="button" data-v="2" data-t="hard">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span data-t="controller">Controller</span><div id="padtxt" data-t="noPad">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p" data-t="start">Spiel starten</button><button id="bSet" class="alt" type="button" data-t="settings">Einstellungen</button><button id="bHelp" class="alt" type="button" data-t="help">Anleitung</button></div>
           </div>
-    <div id="ver">v2026-11-27g-r187</div>
+    <div id="ver">v2026-11-27h-r187</div>
   </div>
   <div id="help" class="overlay" hidden><div class="card"><h1 id="helpT" data-t="help">Anleitung</h1><div id="helpGrid"></div><div class="btns"><button id="helpOk" type="button" data-t="ok">OK</button></div></div></div>
   <div id="credits" class="overlay" hidden><div class="card"><h1 data-t="credits">Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button" data-t="ok">OK</button></div></div></div>
@@ -791,7 +791,7 @@ function setVol(k,v){VOL[k]=Math.max(0,Math.min(1,v));try{localStorage.setItem('
 /* Tonhöhen-Variation (PV), Hall-Sendebus (REVIN) und Hall-Sendung pro Effekt (RSND) */
 let PV=1,REVIN=null,RSND=null,BEDG=null,BEDF=null,BEDT=null;
 const PVS=new Set(['holy','win','draw','ding','kaching','combo','beep','hov','clk','tick','wsw']); /* tonale/UI-Sounds bleiben gleich */
-const REVA={boom:.62,rocket:.42,shotgun:.48,shot:.28,splash:.32,hit:.16,holy:.4,win:.32,cheer:.25,ding:.3,kaching:.2,pop:.3,klonk:.22,throw:.1,debris:.3,ouch:.12,ohno:.18,aah:.14,plop:.12,draw:.2};
+const REVA={boom:.62,boomSub:.8,troete:.25,rocket:.42,shotgun:.48,shot:.28,splash:.32,hit:.16,holy:.4,win:.32,cheer:.25,ding:.3,kaching:.2,pop:.3,klonk:.22,throw:.1,debris:.3,ouch:.12,ohno:.18,aah:.14,plop:.12,draw:.2};
 function makeIR(sec,decay){
   const sr=AC.sampleRate,n=Math.floor(sr*sec),b=AC.createBuffer(2,n,sr),pre=Math.floor(sr*.018);
   for(let c=0;c<2;c++){const d=b.getChannelData(c);let y=0;
@@ -920,7 +920,7 @@ function S3(n,pos,ref,late){try{
   if(!AC||muted||!sfx[n])return;
   if(!pos){pvRun(n,0);return;}
   const cp=camera.position,dx=pos.x-cp.x,dy=pos.y-cp.y,dz=pos.z-cp.z,d=Math.hypot(dx,dy,dz),R=ref||30;
-  if(!late&&(n==='boom'||n==='implode'||n==='debris')&&d>22){const pc=pos.clone?pos.clone():pos;setTimeout(()=>S3(n,pc,ref,1),Math.min(1100,d*8));return;}
+  if(!late&&(n==='boom'||n==='boomSub'||n==='implode'||n==='debris')&&d>22){const pc=pos.clone?pos.clone():pos;setTimeout(()=>S3(n,pc,ref,1),Math.min(1100,d*8));return;}
   const g=Math.max(1/(1+(d/R)*(d/R)),.1*Math.min(1,R/40));if(g<.04)return;
   const rx=_rv.set(1,0,0).applyQuaternion(camera.quaternion),pan=clamp((dx*rx.x+dy*rx.y+dz*rx.z)/Math.max(10,d),-1,1)*.9;
   const gn=AC.createGain(),lp=AC.createBiquadFilter(),pn=AC.createStereoPanner?AC.createStereoPanner():null;gn.gain.value=Math.min(1,g*1.25);
@@ -928,7 +928,7 @@ function S3(n,pos,ref,late){try{
   lp.type='lowpass';lp.frequency.value=clamp(16000/(1+d/18),600,16000);gn.connect(lp);
   let tail=lp;if(pn){pn.pan.value=pan;lp.connect(pn);tail=pn;}tail.connect(MASTER);
   /* Nachhall bei Explosionen: je weiter weg, desto länger und lauter das Echo */
-  const ex=(n==='boom'||n==='implode'),ex_=[];
+  const ex=(n==='boom'||n==='boomSub'||n==='implode'),ex_=[];
   if(ex){const dl=AC.createDelay(1),fb=AC.createGain(),wt=AC.createGain(),lf=AC.createBiquadFilter();
     dl.delayTime.value=.17+Math.min(.26,d/350);fb.gain.value=.45;wt.gain.value=Math.min(.4,.1+d/140);lf.type='lowpass';lf.frequency.value=1300;
     lp.connect(dl);dl.connect(lf);lf.connect(fb);fb.connect(dl);lf.connect(wt);wt.connect(MASTER);ex_.push(dl,fb,wt,lf);}
@@ -946,6 +946,10 @@ Object.assign(sfx,{
  v_mushroom(){const t=AC.currentTime,k=.9+Math.random()*.3;for(let i=0;i<4;i++){const f=(i%2?800:600)*k;voice(t+i*.08,f,f*1.5,.07,'sine',.18);}nz(t,.3,.04,'bandpass',900,1800);},
  v_penguin(){const t=AC.currentTime,k=.85+Math.random()*.3;vox(t,380*k,300*k,.18,[600,1400],.22,.03);},
  v_chicken(){const t=AC.currentTime,k=.9+Math.random()*.3;for(let i=0;i<3;i++)vox(t+i*.075,700*k,520*k,.05,[900,2000],.14);},
+ /* große Explosion: zusätzlicher Tiefbass-Fall mit langem, leicht verzerrtem Grollen (mehr Wumms auf großen Boxen/Kopfhörern) */
+ boomSub(){const t=AC.currentTime;voice(t,70,18,1.8,'sine',.9);voice(t+.03,48,16,2.2,'sine',.55);voice(t,110,30,.7,'triangle',.35);nz(t+.1,2.4,.42,'lowpass',260,35);nz(t+.5,1.6,.2,'lowpass',150,30);},
+ /* Party-Tröte zum Sieg: Ton gleitet hoch und flattert */
+ troete(){const t=AC.currentTime;[0,.85].forEach((d,i)=>{vox(t+d,360,560,.16,[950,1700,2600],.2);vox(t+d+.15,560,540-i*30,.62,[1050,1800,2700],.2,.035);nz(t+d,.18,.06,'bandpass',3000,1800);});},
  boom(){const t=AC.currentTime;
   /* 1 Knall: harter Transient */
   nz(t,.05,.95,'highpass',2800,6500);voice(t,2200,300,.035,'square',.22);
@@ -1797,7 +1801,7 @@ function hurt(w,dmg,dir,f){if(w===st.worm&&dmg>=3)rumble(120,Math.min(.9,.25+dmg
   if(w.hp<=0)kill(w,false);
 }
 function explode(pos,W){
-  S3('boom',pos,70);if(W.r>=2){setTimeout(()=>S3('debris',pos.clone(),45),300);}if(W.r>=2.5)st.duck=.7;if(W&&W.id==='hol')S_('holy');boom(pos,W.r);comicWord(pos,W.r);carve(pos.x,pos.y,pos.z,W.r);blast(pos,W.r);
+  S3('boom',pos,70);if(W.r>=4)S3('boomSub',pos,95);if(W.r>=2){setTimeout(()=>S3('debris',pos.clone(),45),300);}if(W.r>=2.5)st.duck=.7;if(W&&W.id==='hol')S_('holy');boom(pos,W.r);comicWord(pos,W.r);carve(pos.x,pos.y,pos.z,W.r);blast(pos,W.r);
   wavAmp=Math.min(.5,wavAmp+W.r*.04);if(pos.y<WATER+10&&hAt(pos.x,pos.z)<WATER+4)addRing(new V3(pos.x,WATER+.06,pos.z),W.r*2.6); /* Explosion in Wassernähe: Wellen */
   shake=Math.max(shake,.3+W.r*.1);st.kick=Math.max(st.kick||0,Math.min(1.8,.5+W.r*.22));st.shd=camera.position.clone().sub(pos).normalize();rumble(260,Math.min(1,.4+W.r*.1));st.hit.copy(pos);st.hitT=2.4;st.zm=W.r>=2.5;if(st.zm)shake=Math.max(shake,.55+W.r*.1);
   const R=W.r+1.4;let hits=0,bigD=0;
@@ -3200,7 +3204,7 @@ function fireworks(){const ws=worms.filter(w=>w.alive&&w.team===st.winTeam);if(!
     setTimeout(()=>{if(st.mode!=='over')return;const c=[0xff4a4a,0xffd23a,0x5ad1ff,0x7dff6a,0xff7af0][(rnd()*5)|0],c2=[0xffffff,0xffd23a][(rnd()*2)|0];
       for(let k=0;k<26;k++){const a=rnd()*6.28,b=Math.acos(2*rnd()-1),v=5+rnd()*3;sp(x,y,z,Math.sin(b)*Math.cos(a)*v,Math.cos(b)*v,Math.sin(b)*Math.sin(a)*v,k%3?c:c2,.3,1.5,5,0,1.2);}},260);},i*550+300);}
 function endGame(win){
-  st.mode='over';st.winTeam=win<0?null:TEAMS[win];cmt(win>=0?'win':'draw');S_(win>=0?'win':'draw');if(win>=0){fireworks();S_('cheer');aliveOf(win).forEach((w,i)=>setTimeout(()=>{if(st.mode==='over'){w.sayT=-9;say(w,'win','#ffd24a');}},900+i*500));}
+  st.mode='over';st.winTeam=win<0?null:TEAMS[win];cmt(win>=0?'win':'draw');S_(win>=0?'win':'draw');if(win>=0){fireworks();S_('cheer');setTimeout(()=>{if(st.mode==='over')S_('troete');},1100);aliveOf(win).forEach((w,i)=>setTimeout(()=>{if(st.mode==='over'){w.sayT=-9;say(w,'win','#ffd24a');}},900+i*500));}
   $('tbar').hidden=true;$('turn').hidden=true;$('wind').hidden=true;$('cmp').hidden=true;$('tmBtn').hidden=true;$('pdial').hidden=true;$('teams').classList.remove('open');$('bottom').hidden=true;$('inv').hidden=true;$('touch').hidden=true;
   $('endTitle').textContent=win<0?'Unentschieden':TEAMS[win].label+' gewinnt!';
   $('endTitle').style.color=win<0?'':TEAMS[win].color;
