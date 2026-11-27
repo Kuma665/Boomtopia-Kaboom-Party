@@ -363,7 +363,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 </svg></h1>
       <div class="optgrid"><div class="opt"><span data-t="teams">Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span data-t="wormsPer">Figuren pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span data-t="map">Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="island">Insel</button><button data-v="1" data-t="archi">Archipel</button><button data-v="2" data-t="gorge">Schlucht</button><button data-v="3" data-t="spires">Felsnadeln</button></div></div><div class="opt"><span data-t="land">Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="meadow">Wiese</button><button data-v="1" data-t="snow">Schnee</button><button data-v="2" data-t="desert">Wüste</button><button data-v="3" data-t="volcano">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span data-t="cpuStr">Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0" data-t="easy">Einfach</button><button type="button" data-v="1" class="on" data-t="normal">Normal</button><button type="button" data-v="2" data-t="hard">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span data-t="controller">Controller</span><div id="padtxt" data-t="noPad">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p" data-t="start">Spiel starten</button><button id="bSet" class="alt" type="button" data-t="settings">Einstellungen</button><button id="bHelp" class="alt" type="button" data-t="help">Anleitung</button></div>
           </div>
-    <div id="ver">v2026-11-27e-r187</div>
+    <div id="ver">v2026-11-27f-r187</div>
   </div>
   <div id="help" class="overlay" hidden><div class="card"><h1 id="helpT" data-t="help">Anleitung</h1><div id="helpGrid"></div><div class="btns"><button id="helpOk" type="button" data-t="ok">OK</button></div></div></div>
   <div id="credits" class="overlay" hidden><div class="card"><h1 data-t="credits">Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button" data-t="ok">OK</button></div></div></div>
@@ -1171,17 +1171,46 @@ function splash(p){wavAmp=Math.min(.5,wavAmp+.04);
   for(let i=0;i<22;i++){const a=rnd()*6.28,v=1+rnd()*3.5;sp(p.x,WATER,p.z,Math.cos(a)*v,5+rnd()*6,Math.sin(a)*v,TH.splash,.18+rnd()*.2,.8+rnd()*.5,22,0,0);}
 }
 const floaters=[];
-function floatText(txt,p,color,sc){sc=sc||1;
+function floatText(txt,p,color,sc,jump){sc=sc||1;
   const c=document.createElement('canvas');c.width=160;c.height=64;const g=c.getContext('2d');
   g.font='bold 40px "Lilita One",system-ui,sans-serif';g.textAlign='center';g.textBaseline='middle';
   {const mw=g.measureText(txt).width;if(mw>148)g.font='bold '+Math.max(18,Math.floor(40*148/mw))+'px "Lilita One",system-ui,sans-serif';}
   g.lineWidth=6;g.strokeStyle='rgba(0,0,0,.65)';g.strokeText(txt,80,32);g.fillStyle=color;g.fillText(txt,80,32);
   const tex=new THREE.CanvasTexture(c),spr=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false}));
-  spr.scale.set(.01,.01,1);spr.position.copy(p);spr.renderOrder=10;gameGroup.add(spr);floaters.push({spr,t:0,bx:4*sc,by:1.6*sc});
+  spr.scale.set(.01,.01,1);spr.position.copy(p);spr.renderOrder=10;gameGroup.add(spr);
+  const f={spr,t:0,bx:4*sc,by:1.6*sc};
+  /* springende Zahl: Bogen zur Seite, ein Aufprall (jv = Geschwindigkeit, jy = Boden) */
+  if(jump){const a=rnd()*6.283;f.jv=new V3(Math.cos(a)*1.6,6.5,Math.sin(a)*1.6);f.jy=p.y-.4;f.jb=0;}
+  floaters.push(f);
+}
+/* Comic-Schrift bei Explosionen: gezackter Stern + Wort, Texturen je Wort einmal gebaut und wiederverwendet */
+const KBTEX={},comics=[];let kbLast=-9;
+function kbTex(w){if(KBTEX[w])return KBTEX[w];
+  const c=document.createElement('canvas');c.width=320;c.height=200;const g=c.getContext('2d'),cx=160,cy=100;
+  const star=(ro,ri,n,col)=>{g.beginPath();for(let i=0;i<n*2;i++){const a=i/(n*2)*6.2832-1.4,r=i%2?ri:ro,j=i%2?1:(.86+.14*Math.sin(i*2.3));g.lineTo(cx+Math.cos(a)*r*1.5*j,cy+Math.sin(a)*r*j);}g.closePath();g.fillStyle=col;g.fill();};
+  g.lineJoin='round';star(96,66,13,'#1a1210');star(90,60,13,'#ffd23f');star(62,44,11,'#ff5a2e');
+  let fs=64;g.font=fs+'px "Lilita One",system-ui,sans-serif';const mw=g.measureText(w).width;if(mw>270){fs=Math.floor(fs*270/mw);g.font=fs+'px "Lilita One",system-ui,sans-serif';}
+  g.textAlign='center';g.textBaseline='middle';g.save();g.translate(cx,cy);g.rotate(-.1);
+  g.lineWidth=12;g.strokeStyle='#1a1210';g.strokeText(w,0,4);g.fillStyle='#fff';g.fillText(w,0,4);g.fillStyle='rgba(255,210,63,.55)';g.fillText(w,0,9);g.fillStyle='#fff';g.fillText(w,0,2);g.restore();
+  const t=new THREE.CanvasTexture(c);KBTEX[w]=t;return t;}
+function comicWord(pos,r){
+  if(clock-kbLast<.3||r<2)return;kbLast=clock;
+  const L=r>=4.5?UI_T.boomBig:UI_T.boomMid,w=L[(rnd()*L.length)|0];
+  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:kbTex(w),transparent:true,depthTest:false}));
+  s.position.set(pos.x,pos.y+1.4+r*.45,pos.z);s.renderOrder=11;s.scale.set(.01,.01,1);gameGroup.add(s);
+  comics.push({s,t:0,k:2.6+r*.55,rot:(rnd()-.5)*.4});if(comics.length>4){const o=comics.shift();gameGroup.remove(o.s);o.s.material.dispose();}
+}
+function updateComics(dt){
+  for(let i=comics.length-1;i>=0;i--){const c=comics[i];c.t+=dt;const t=c.t,e=t<.09?1.3*t/.09:t<.22?1.3-.3*(t-.09)/.13:1+.06*(t-.22);
+    c.s.scale.set(c.k*1.6*e,c.k*e,1);c.s.material.rotation=c.rot+Math.sin(t*40)*.08*Math.max(0,1-t*4);c.s.material.opacity=t<.6?1:Math.max(0,1-(t-.6)/.35);c.s.position.y+=dt*.6;
+    if(t>.95){gameGroup.remove(c.s);c.s.material.dispose();comics.splice(i,1);}}
 }
 function updateFloaters(dt){
+  updateComics(dt);
   for(let i=floaters.length-1;i>=0;i--){
-    const f=floaters[i];f.t+=dt;f.spr.position.y+=dt*2;f.spr.material.opacity=Math.max(0,1-f.t/1.4);{const t=f.t,k=t<.12?1.4*(t/.12):t<.3?1.4-.4*((t-.12)/.18):1;f.spr.scale.set(f.bx*k,f.by*k,1);f.spr.material.rotation=f.bx>4.6?Math.sin(t*32)*.14*Math.max(0,1-t*3):0;}
+    const f=floaters[i];f.t+=dt;
+    if(f.jv){f.jv.y-=16*dt;f.spr.position.addScaledVector(f.jv,dt);if(f.spr.position.y<f.jy&&f.jv.y<0){f.spr.position.y=f.jy;if(f.jb++<1){f.jv.y*=-.42;f.jv.x*=.5;f.jv.z*=.5;}else f.jv.set(0,0,0);}}
+    else f.spr.position.y+=dt*2;f.spr.material.opacity=Math.max(0,1-f.t/1.4);{const t=f.t,k=t<.12?1.4*(t/.12):t<.3?1.4-.4*((t-.12)/.18):1;f.spr.scale.set(f.bx*k,f.by*k,1);f.spr.material.rotation=f.bx>4.6?Math.sin(t*32)*.14*Math.max(0,1-t*3):0;}
     if(f.t>1.4){gameGroup.remove(f.spr);f.spr.material.map.dispose();f.spr.material.dispose();floaters.splice(i,1);}
   }
 }
@@ -1753,7 +1782,7 @@ function hurt(w,dmg,dir,f){if(w===st.worm&&dmg>=3)rumble(120,Math.min(.9,.25+dmg
   {const hsv=w.hp<=0?.11:dmg>=18?Math.min(.09,.04+dmg*.001):dmg>=5?.04:0;if(hsv)st.hs=Math.max(st.hs||0,hsv);}
   if(dmg>=25){let e=$('hfl');if(!e){e=document.createElement('div');e.id='hfl';e.style.cssText='position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle,rgba(255,240,200,.9),rgba(255,160,60,.7));opacity:0;z-index:5';$('game').appendChild(e);}
     e.style.transition='none';e.style.opacity=Math.min(.4,dmg/170);void e.offsetWidth;e.style.transition='opacity .4s ease-out';e.style.opacity=0;}shake=Math.max(shake,Math.min(.9,dmg*.015));
-  floatText('-'+dmg,w.pos.clone().add(new V3(0,2.6,0)),dmg>=25?'#ff4a3a':dmg>=10?'#ffd24a':'#ffffff',1+Math.min(.9,dmg/40));
+  floatText('-'+dmg,w.pos.clone().add(new V3(0,2.6,0)),dmg>=25?'#ff4a3a':dmg>=10?'#ffd24a':'#ffffff',1+Math.min(.9,dmg/40),true);
   if(dir){w.kb=true;w.vel.addScaledVector(dir,14*f+3);w.vel.y+=6*f+2;w.onGround=false;}
   bloodFx(w,dmg,dir);charAdd(w,dmg);updateInjury(w);{const at=st.worm;if(at&&w.team!==at.team&&!st.cpuTurn&&st.mode==='play')hitMark(w.hp<=0);}
   drawLabel(w);hudDirty=true;
@@ -1762,7 +1791,7 @@ function hurt(w,dmg,dir,f){if(w===st.worm&&dmg>=3)rumble(120,Math.min(.9,.25+dmg
   if(w.hp<=0)kill(w,false);
 }
 function explode(pos,W){
-  S3('boom',pos,70);if(W.r>=2){setTimeout(()=>S3('debris',pos.clone(),45),300);}if(W.r>=2.5)st.duck=.7;if(W&&W.id==='hol')S_('holy');boom(pos,W.r);carve(pos.x,pos.y,pos.z,W.r);blast(pos,W.r);
+  S3('boom',pos,70);if(W.r>=2){setTimeout(()=>S3('debris',pos.clone(),45),300);}if(W.r>=2.5)st.duck=.7;if(W&&W.id==='hol')S_('holy');boom(pos,W.r);comicWord(pos,W.r);carve(pos.x,pos.y,pos.z,W.r);blast(pos,W.r);
   wavAmp=Math.min(.5,wavAmp+W.r*.04);if(pos.y<WATER+10&&hAt(pos.x,pos.z)<WATER+4)addRing(new V3(pos.x,WATER+.06,pos.z),W.r*2.6); /* Explosion in Wassernähe: Wellen */
   shake=Math.max(shake,.3+W.r*.1);st.kick=Math.max(st.kick||0,Math.min(1.8,.5+W.r*.22));st.shd=camera.position.clone().sub(pos).normalize();rumble(260,Math.min(1,.4+W.r*.1));st.hit.copy(pos);st.hitT=2.4;st.zm=W.r>=2.5;if(st.zm)shake=Math.max(shake,.55+W.r*.1);
   const R=W.r+1.4;let hits=0,bigD=0;
@@ -3937,7 +3966,7 @@ function frame(now){
 /* ===== Grundausstattung: Texte, Vollbild, Wake Lock, Dreh-Hinweis, Zurück-Taste, Fokus/Pause, Stumm, Controller-Symbole, Grafik Auto, Credits ===== */
 const UI_T={ok:'OK',back:'Zurück',rot:'Bitte das Handy quer halten',mute:'Ton an/aus',credTitle:'Credits',
  cred:['Musik &amp; Sounds: im Spiel erzeugt (Web Audio)','Logo-Schrift: Luckiest Guy – Astigmatic (Apache 2.0)','3D-Grafik: three.js (MIT)'],
- finale:'Party-Finale',endNone:'Alle Partygäste sind raus.',endLeft:(a,n)=>a+' von '+n+' Figuren sind noch dabei.',
+ finale:'Party-Finale',boomBig:['KABOOM!','WUMMS!','BÄMM!'],boomMid:['RUMMS!','BUMM!','PENG!'],endNone:'Alle Partygäste sind raus.',endLeft:(a,n)=>a+' von '+n+' Figuren sind noch dabei.',
  teamsClose:b=>'R3 / '+b+' zum Schließen',teamsCloseKey:'H zum Schließen',
  s:{random:'Zufall',
   ok:'OK',
