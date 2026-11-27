@@ -363,7 +363,7 @@ body{margin:0;background:var(--ink);color:var(--text);font:600 14px/1.4 var(--bo
 </svg></h1>
       <div class="optgrid"><div class="opt"><span data-t="teams">Teams</span><div class="chips" data-k="nt"><button type="button" data-v="2" class="on">2</button><button type="button" data-v="3">3</button><button type="button" data-v="4">4</button><button type="button" data-v="5">5</button><button type="button" data-v="6">6</button><button type="button" data-v="7">7</button><button type="button" data-v="8">8</button></div></div><div class="opt"><span data-t="wormsPer">Figuren pro Team</span><div class="chips" data-k="n"><button data-v="1">1</button><button data-v="2">2</button><button data-v="3" class="on">3</button><button data-v="4">4</button><button data-v="5">5</button></div></div><div class="opt"><span data-t="map">Karte</span><div class="chips" data-k="map"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="island">Insel</button><button data-v="1" data-t="archi">Archipel</button><button data-v="2" data-t="gorge">Schlucht</button><button data-v="3" data-t="spires">Felsnadeln</button></div></div><div class="opt"><span data-t="land">Landschaft</span><div class="chips" data-k="theme"><button data-v="-1" class="on" data-t="random">Zufall</button><button data-v="0" data-t="meadow">Wiese</button><button data-v="1" data-t="snow">Schnee</button><button data-v="2" data-t="desert">Wüste</button><button data-v="3" data-t="volcano">Vulkan</button></div></div><div class="opt" id="optdiff" hidden><span data-t="cpuStr">Computer-Stärke</span><div class="chips" data-k="diff"><button type="button" data-v="0" data-t="easy">Einfach</button><button type="button" data-v="1" class="on" data-t="normal">Normal</button><button type="button" data-v="2" data-t="hard">Schwer</button></div></div><div class="opt" style="grid-column:1/-1"><span data-t="controller">Controller</span><div id="padtxt" data-t="noPad">keiner erkannt – Taste am Controller drücken</div></div></div><div class="tcards" id="tcards"></div><div class="btns"><button id="b2p" data-t="start">Spiel starten</button><button id="bSet" class="alt" type="button" data-t="settings">Einstellungen</button><button id="bHelp" class="alt" type="button" data-t="help">Anleitung</button></div>
           </div>
-    <div id="ver">v2026-11-27b-r187</div>
+    <div id="ver">v2026-11-27c-r187</div>
   </div>
   <div id="help" class="overlay" hidden><div class="card"><h1 id="helpT" data-t="help">Anleitung</h1><div id="helpGrid"></div><div class="btns"><button id="helpOk" type="button" data-t="ok">OK</button></div></div></div>
   <div id="credits" class="overlay" hidden><div class="card"><h1 data-t="credits">Credits</h1><ul id="credList"></ul><div class="btns"><button id="credOk" type="button" data-t="ok">OK</button></div></div></div>
@@ -487,7 +487,7 @@ function setMood(m){const M=Array.isArray(m)?m:MOODS[m];
     vv.set(p.getX(i),p.getY(i),p.getZ(i)).normalize();const ca=Math.max(0,vv.dot(sd)),gl=Math.pow(ca,6)*.22+Math.pow(ca,40)*.4; /* Glühen um die Sonne */
     c.setXYZ(i,t.r+sc.r*gl,t.g+sc.g*gl,t.b+sc.b*gl);}c.needsUpdate=true;
   try{window.__mood=typeof m==='number'?m:window.__mood;applyGrade(window.__mood||0);}catch(e){}
-  scene.fog.color.setHex(M[3]);sun.color.setHex(M[4]);sun.intensity=M[5];hemi.color.setHex(M[6]);hemi.groundColor.setHex(M[7]);hemi.intensity=M[8];sun.position.set(M[9],M[10],M[11]);SUND.set(M[9],M[10],M[11]).normalize();
+  scene.fog.color.setHex(M[3]);sun.color.setHex(M[4]);sun.intensity=M[5];hemi.color.setHex(M[6]);hemi.groundColor.setHex(M[7]);hemi.intensity=M[8];sun.position.set(M[9],M[10],M[11]);SUND.set(M[9],M[10],M[11]).normalize();WSKY.setHex(M[1]).lerp(t.setHex(M[2]),.45);
   const gl=scene.userData.glow;gl.position.copy(sun.position).normalize().multiplyScalar(420);gl.material.color.setHex(M[4]);}
 // Wolken
 const clouds=[];
@@ -513,11 +513,19 @@ water.rotation.x=-Math.PI/2;water.position.y=WATER;scene.add(water);
 /* Schaumkante: Geländehöhe als 16-Bit-Textur, das Wasser vergleicht sie mit der eigenen Höhe und zeichnet wandernden Schaum */
 const HTD=new Uint8Array(N*N*4),HTEX=new THREE.DataTexture(HTD,N,N,THREE.RGBAFormat,THREE.UnsignedByteType),WFOAM=new THREE.Color(1,1,1),TUFU={value:0};
 HTEX.minFilter=HTEX.magFilter=THREE.NearestFilter;HTEX.flipY=false;HTEX.generateMipmaps=false;HTEX.needsUpdate=true;
+/* Wasser-Extras (Grafik Mittel/Hoch, WQ=1): zweite Wellenschicht, Himmelsspiegelung am flachen Blickwinkel (Farbe WSKY aus setMood,
+   Stärke WREF je Karte), Lava-Glutadern (WLAVA). Niedrig (WQ=0) = alter Stand. */
+const WQ={value:1},WREF={value:.7},WLAVA={value:0},WSKY=new THREE.Color(0x8cc8ee);
 water.material.onBeforeCompile=sh=>{
-  sh.uniforms.uT=TUFU;sh.uniforms.htex={value:HTEX};sh.uniforms.uFoam={value:WFOAM};
+  sh.uniforms.uT=TUFU;sh.uniforms.htex={value:HTEX};sh.uniforms.uFoam={value:WFOAM};sh.uniforms.uQ=WQ;sh.uniforms.uRef=WREF;sh.uniforms.uLava=WLAVA;sh.uniforms.uSky={value:WSKY};
+  sh.fragmentShader=sh.fragmentShader.replace('#include <normal_fragment_maps>',THREE.ShaderChunk.normal_fragment_maps.replace(/(mapN = texture2D\( normalMap, vNormalMapUv \)\.xyz \* 2\.0 - 1\.0;)/,
+    '$1\n if(uQ>.5){vec3 m2=texture2D(normalMap,vNormalMapUv*.31+vec2(uT*.007,-uT*.011)).xyz*2.0-1.0;mapN=normalize(vec3(mapN.xy*.8+m2.xy*.9,mapN.z*m2.z));}'))
+   .replace('#include <emissivemap_fragment>','#include <emissivemap_fragment>\n if(uLava>.5&&uQ>.5){float lv=sin(vWPw.x*.33+uT*.45+sin(vWPw.z*.27-uT*.3)*2.2)*sin(vWPw.z*.41-uT*.32+sin(vWPw.x*.19)*1.7)*.5+.5;totalEmissiveRadiance*=.72+.75*smoothstep(.55,1.0,lv);}')
+   .replace('#include <tonemapping_fragment>','if(uQ>.5&&uRef>.01){float fr=pow(1.0-clamp(dot(normal,normalize(vViewPosition)),0.0,1.0),3.0)*uRef;gl_FragColor.rgb=mix(gl_FragColor.rgb,uSky,fr);gl_FragColor.a=max(gl_FragColor.a,fr);}\n#include <tonemapping_fragment>');
+  window.__wsh=sh.fragmentShader.includes('m2=texture2D')&&sh.fragmentShader.includes('uSky,fr')&&sh.fragmentShader.includes('float lv=');
   sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 vWPw;').replace('#include <begin_vertex>','#include <begin_vertex>\nvWPw=(modelMatrix*vec4(transformed,1.0)).xyz;');
   sh.fragmentShader=sh.fragmentShader.replace('#include <common>',`#include <common>
-varying vec3 vWPw;uniform float uT;uniform sampler2D htex;uniform vec3 uFoam;
+varying vec3 vWPw;uniform float uT;uniform sampler2D htex;uniform vec3 uFoam;uniform float uQ;uniform float uRef;uniform float uLava;uniform vec3 uSky;
 float hdec(vec2 ij){vec4 c=texture2D(htex,(ij+.5)/${N}.0);return (c.r*255.0*256.0+c.g*255.0)/65535.0*40.0-6.0;}
 float hbil(vec2 p){vec2 i=floor(p),f=fract(p);return mix(mix(hdec(i),hdec(i+vec2(1.0,0.0)),f.x),mix(hdec(i+vec2(0.0,1.0)),hdec(i+vec2(1.0,1.0)),f.x),f.y);}`).replace('#include <color_fragment>',`#include <color_fragment>
 {vec2 q=(vWPw.xz+${HALF.toFixed(1)})/${CELL.toFixed(5)};
@@ -3460,7 +3468,7 @@ document.querySelectorAll('input.sens').forEach(el=>{const k=el.dataset.k,lab=$(
   ch.querySelectorAll('button').forEach(b=>{b.classList.toggle('on',b.dataset.v===v);b.addEventListener('click',()=>{try{localStorage.setItem(sk,b.dataset.v);}catch(e){}});});});
 let GFXA=false,GFXL=matchMedia('(pointer:coarse)').matches?2:1;
 function applyGfx(v){const pr=window.devicePixelRatio||1;GFXA=String(v)==='0';const lv=GFXA?GFXL:(+v||1);st.gfx=lv;renderer.setPixelRatio(lv===3?1:lv===2?Math.min(pr,1.5):Math.min(pr,2));
-  sun.shadow.radius=lv===1?3:lv===2?1.6:1; /* weiche Schattenkanten: Hoch weich, Mittel leicht, Niedrig hart */
+  sun.shadow.radius=lv===1?3:lv===2?1.6:1;WQ.value=lv===3?0:1; /* weiche Schattenkanten: Hoch weich, Mittel leicht, Niedrig hart */
   const sz=lv===3?512:lv===2?1024:2048;if(sun.shadow.mapSize.x!==sz){sun.shadow.mapSize.set(sz,sz);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null;}}resize();}
 document.querySelectorAll('.chips[data-k=gfx] button').forEach(b=>b.addEventListener('click',()=>applyGfx(b.dataset.v)));
 {const g=document.querySelector('.chips[data-k=gfx] .on');applyGfx(g?g.dataset.v:1);}
@@ -3523,7 +3531,7 @@ function spawnChunk(pos,vel){const c=chunks[chI=(chI+1)%CHN],q=rnd();c.on=true;c
   const t=rnd(),col=t<.38&&THEME!==3?chHex(mixc(TH.gA,TH.gB,Math.round(rnd()*3)/3)):t<.72?TH.debris:t<.9?TH.debris2:chHex(TH.rock);
   c.m.material=tm(col);c.m.position.copy(pos);c.v.copy(vel);c.rs.set(rnd()*12-6,rnd()*12-6,rnd()*12-6);}
 function clearChunks(){for(const c of chunks){c.on=false;c.m.visible=false;}}
-function updateChunks(dt){TUFU.value=clock;WFOAM.setRGB(TH.foam[0],TH.foam[1],TH.foam[2]);BLK*=Math.exp(-3.2*dt);FLK*=Math.exp(-6*dt);if(window.__bloom)window.__bloom.strength=[.5,.35,.12,.5][THEME]+BLK;flashEl.style.opacity=FLK<.01?0:FLK;for(const c of chunks){if(!c.on)continue;c.life-=dt;if(c.life<=0){c.on=false;c.m.visible=false;continue;}
+function updateChunks(dt){TUFU.value=clock;WFOAM.setRGB(TH.foam[0],TH.foam[1],TH.foam[2]);WREF.value=[.7,.5,0,.1][THEME];WLAVA.value=THEME===3?1:0;BLK*=Math.exp(-3.2*dt);FLK*=Math.exp(-6*dt);if(window.__bloom)window.__bloom.strength=[.5,.35,.12,.5][THEME]+BLK;flashEl.style.opacity=FLK<.01?0:FLK;for(const c of chunks){if(!c.on)continue;c.life-=dt;if(c.life<=0){c.on=false;c.m.visible=false;continue;}
   const p=c.m.position,gh=hAt(p.x,p.z);
   if(!c.rest){c.v.y-=G*dt;p.addScaledVector(c.v,dt);c.m.rotation.x+=c.rs.x*dt;c.m.rotation.y+=c.rs.y*dt;c.m.rotation.z+=c.rs.z*dt;
     if(p.y<WATER&&gh<WATER){c.on=false;c.m.visible=false;continue;}
